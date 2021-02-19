@@ -1,0 +1,312 @@
+include:
+  - docassemble.AssemblyLine:al_package.yml
+  - docassemble.MassAccess:massaccess.yml
+---
+comment: |
+  The metadata section controls the tab title and saved interview title. You can delete this section if you include this YAML file in another YAML file.
+metadata:
+  title: |
+    Motion to reconsider template
+  short title: |
+    Motion to reconsider template
+---
+comment: |
+  This section is used by AssemblyLine to control how some of the questions work.
+mandatory: True
+code: |
+  interview_metadata # make sure we initialize the object
+  if not defined("interview_metadata['Motion_to_Reconsider_Template']"):
+    interview_metadata.initializeObject('Motion_to_Reconsider_Template')
+  interview_metadata['Motion_to_Reconsider_Template'].update({
+    'title': 'Motion to reconsider template',
+    'short title': 'Motion to reconsider template',
+    'description': 'Motion to reconsider template',
+    'original_form': '',
+    'allowed courts': [
+      "Boston Municipal Court",
+      "District Court",
+      "Superior Court",
+      "Housing Court",
+      "Probate and Family Court",
+      "Juvenile Court",
+      "Land Court"
+    ],
+    'categories': [
+    ],
+    'logic block variable': 'Motion_to_Reconsider_Template',
+    'attachment block variable': 'Motion_to_Reconsider_Template_attachment',
+    'typical role': 'unknown',
+  })
+---
+code: |
+  interview_short_title = 'File a Motion to Reconsider'
+---
+code: |
+  al_form_type = 'appeal'
+---
+features:
+  navigation: True
+---
+sections:
+  - review_Motion_to_Reconsider_Template: Review your answers
+---
+objects:
+  - defendants: ALPeopleList.using(there_are_any=True)
+  - plaintiffs: ALPeopleList.using(there_are_any=True)
+  - users: ALPeopleList.using(there_are_any=True)
+  - exhibits: DAFileList.using(auto_gather=False, gathered=True)
+---
+mandatory: True
+id: main_order_Motion_to_Reconsider_Template
+code: |
+  # Controls the flow of the basic building blocks of the
+  # interview. To use this interview in another interview
+  # delete the `mandatory: True` specifier or this whole block.
+  al_intro_screen  # Organization intro screen/splash screen
+  # Introduction to this specific interview
+  Motion_to_Reconsider_Template_intro
+  # Trigger the whole interview order block to control question order
+  interview_order_Motion_to_Reconsider_Template
+  signature_date
+  # Save (anonymized) interview statistics.
+  store_variables_snapshot(data={'zip': users[0].address.zip})
+  Motion_to_Reconsider_Template_preview_question  # Pre-canned preview screen
+  basic_questions_signature_flow
+  users[0].signature
+  Motion_to_Reconsider_Template_download
+---
+id: interview_order_Motion_to_Reconsider_Template
+code: |
+  # This is a placeholder to control order of questions in this interview
+  # Set the allowed courts for this interview
+  allowed_courts = interview_metadata["Motion_to_Reconsider_Template"]["allowed courts"]
+  nav.set_section('review_Motion_to_Reconsider_Template')
+  # Below sets the user_role by asking a question.
+  # You can set user_role directly instead to either 'plaintiff' or 'defendant'
+  user_ask_role
+  trial_court_docket_number
+  if has_evidence:
+    review_exhibits
+  appeals_court_docket_number
+  set_progress(12.5)
+  parties_to_be_served
+  # Set the answer file name.
+  set_parts(subtitle=str(users))
+  trial_court
+  set_progress(25.0)
+  defendants
+  plaintiffs
+  interview_order_Motion_to_Reconsider_Template = True
+---
+comment: |
+  This question is used to introduce your interview. Please customize
+id: Motion to reconsider template
+continue button field: Motion_to_Reconsider_Template_intro
+question: |
+  Motion to reconsider template
+subquestion: |
+  Motion to reconsider template
+---
+id: Review your form before you sign it
+continue button field: Motion_to_Reconsider_Template_preview_question
+question: |
+  Review your form before you sign it
+subquestion: |
+  Here is a preview of the form you'll sign on the next page. 
+  
+   ${ al_user_bundle.as_pdf(key='preview') }
+  
+  Remember to come back to this window to continue and sign your form.
+---
+id: trial court docket number
+question: |
+  What is the trial court docket number for your case?
+fields:
+  - 'Trial court docket number': trial_court_docket_number
+
+---
+id: appeals court docket number
+question: |
+  What is the Appeals Court docket number for your case?
+fields:
+  - 'Appeals court docket number': appeals_court_docket_number
+
+---
+id: record appendix
+question: |
+  You are required to submit copies of relevant Trial Court documents. 
+subquestion: |  
+  Examples include: 
+  
+    * the Trial Court's docket 
+    
+    * the complaint
+    
+    * your answer
+    
+    * the judgment
+    
+    * filings related to your Motion to Stay in the Trial Court.
+    
+  If you entered into an agreement for judgment, include a copy of the agreement for judgment.
+fields:
+  - Do you have any documents to share with the judge?: has_evidence
+    datatype: yesnoradio
+  - I state that filing a complete record appendix is impracticable.: no_record_statement
+    datatype: yesno
+    show if: 
+      variable: has_evidence      
+      is: False
+  - Tap "browse" and choose all of the documents you want to upload at once. You can edit or add additional documents on the next screen.: exhibits
+    datatype: files
+    show if: has_evidence
+    maximum image size: 1024
+    image upload type: jpeg    
+    accept: |
+      "image/*, image/png,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf,.pdf"
+validation code: |
+  if has_evidence and sum(exhibit.size_in_bytes() for exhibit in exhibits) > (15 * 1024 * 1024):
+    validation_error("Please upload a file smaller than 15 MB.")
+  if not has_evidence and not no_record_statement: 
+    validation_error("You must select the box.")
+---
+id: review exhibits
+question: |
+  Review your exhibits
+subquestion: |
+  Look at the exhibits below. If you want to change the order, use the arrows
+  to move an exhibit up or down in the list. Click "delete" or "add another"
+  to change which exhibits you send to the court.
+  
+  ${ exhibits.table }
+  
+  ${exhibits.add_action() }
+continue button field: review_exhibits
+---
+table: exhibits.table
+rows: exhibits
+allow reordering: True
+columns:
+  - File name: showifdef(row_item.attr_name('filename'))
+  # - Size: row_item.size_in_bytes() / 1024 / 1024
+  - Thumbnail: row_item.show(width="100px")  
+delete buttons: True
+---
+id: add additional document
+question: |
+  Exhibit document ${i+1}  
+fields:
+  - no label: exhibits[i]
+    datatype: file
+    accept: |
+      "image/*, image/png,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf,.pdf"   
+validation code: |
+  # Upload field creates a DAFileList
+  # We want it to be a plain DAFile instead
+  if isinstance(exhibits[i], DAFileList):
+    temp_name = exhibits[i].instanceName
+    exhibits[i] = next(iter(exhibits[i]))
+    # Make sure the "instanceName" shows the correct position in the list,
+    # instead of showing a nested DAFileList's instanceName
+    exhibits[i].instanceName = temp_name
+---
+id: Screen four
+question: |
+  Screen four
+fields:
+  - 'Parties to be served': parties_to_be_served
+    input type: area
+
+  - 'Method of service': method_of_service
+
+  - 'Date of service': service_date
+    datatype: date
+---
+progress: 100
+id: download
+event: Motion_to_Reconsider_Template_download
+question: |
+  Your form is ready to download.
+subquestion: |
+  Thank you ${users}. Your form is ready to download and deliver.
+  
+  Below is a preview of your form.
+  
+  ${ al_user_bundle.download_list_html() }
+  
+  ${ al_user_bundle.send_button_html() }
+---
+objects:
+  - Motion_to_Reconsider_Template_attachment: ALDocument.using(title="Motion to reconsider template", filename="Motion_to_Reconsider_Template", enabled=True, has_addendum=False)
+---
+objects:
+  - al_user_bundle: ALDocumentBundle.using(elements=[Motion_to_Reconsider_Template_attachment], filename="Motion_to_Reconsider_Template.pdf", title="All forms to download for your records")
+  - al_court_bundle: ALDocumentBundle.using(elements=[Motion_to_Reconsider_Template_attachment], filename="Motion_to_Reconsider_Template.pdf", title="All forms to download for your records")
+---
+attachment:
+    variable name: Motion_to_Reconsider_Template_attachment[i]
+    name: Motion to reconsider template
+    filename: Motion-to-reconsider-template
+    docx template file: Motion_to_Reconsider_Template.docx
+---
+id: Motion_to_Reconsider_Template review screen
+event: review_Motion_to_Reconsider_Template
+question: |
+  Review Screen
+subquestion: |
+  Edit your answers below
+review: 
+  - Edit: parties_to_be_served
+    button: |
+      **Parties to be served**:
+      > ${ single_paragraph(parties_to_be_served) }
+  - Edit: appeals_court_docket_number
+    button: |
+      **Appeals court docket number**:
+      ${ appeals_court_docket_number }
+  - Edit: method_of_service
+    button: |
+      **Method of service**:
+      ${ method_of_service }
+  - Edit: exhibits
+    button: |
+      **Exhibits**:
+      ${ exhibits }
+  - Edit: has_evidence
+    button: |
+      **Has evidence**:
+      ${ word(yesno(has_evidence)) }
+  - Edit: trial_court_docket_number
+    button: |
+      **Trial court docket number**:
+      ${ trial_court_docket_number }
+  - Edit: service_date
+    button: |
+      **Date of service**:
+      ${ service_date }
+  - Edit: trial_court
+    button: |
+      **trial_court**:
+      ${ trial_court }
+  - Edit: users[0].signature
+    button: |
+      **users[0].signature**:
+      ${ users[0].signature }
+  - Edit: defendants[0].name.first
+    button: |
+      **defendants**
+
+      % for my_var in defendants:
+        * ${ my_var }
+      % endfor
+    # NOTE: a question block with 'defendants.revisit'
+    # lets the user edit all of the items at once
+  - Edit: plaintiffs[0].name.first
+    button: |
+      **plaintiffs**
+
+      % for my_var in plaintiffs:
+        * ${ my_var }
+      % endfor
+    # NOTE: a question block with 'plaintiffs.revisit'
+    # lets the user edit all of the items at once
