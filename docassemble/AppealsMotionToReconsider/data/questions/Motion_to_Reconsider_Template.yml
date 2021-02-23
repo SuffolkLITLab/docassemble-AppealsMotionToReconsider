@@ -6,9 +6,9 @@ comment: |
   The metadata section controls the tab title and saved interview title. You can delete this section if you include this YAML file in another YAML file.
 metadata:
   title: |
-    Motion to reconsider template
+    Motion to Reconsider
   short title: |
-    Motion to reconsider template
+    Motion to Reconsider
 ---
 comment: |
   This section is used by AssemblyLine to control how some of the questions work.
@@ -51,8 +51,6 @@ sections:
   - review_Motion_to_Reconsider_Template: Review your answers
 ---
 objects:
-  - defendants: ALPeopleList.using(there_are_any=True)
-  - plaintiffs: ALPeopleList.using(there_are_any=True)
   - users: ALPeopleList.using(there_are_any=True)
   - exhibits: DAFileList.using(auto_gather=False, gathered=True)
 ---
@@ -84,18 +82,28 @@ code: |
   # Below sets the user_role by asking a question.
   # You can set user_role directly instead to either 'plaintiff' or 'defendant'
   user_ask_role
+  plaintiffs.gather()
+  plaintiffs[0].address.address
+  defendants.gather()
+  defendants[0].address.address
+  other_parties.there_are_any = True
+  
+  trial_court
   trial_court_docket_number
+  appeals_court_docket_number
+  
   if has_evidence:
     review_exhibits
-  appeals_court_docket_number
+    
   set_progress(12.5)
+  method_of_service
   parties_to_be_served
+  service_date
+  
   # Set the answer file name.
   set_parts(subtitle=str(users))
-  trial_court
+ 
   set_progress(25.0)
-  defendants
-  plaintiffs
   interview_order_Motion_to_Reconsider_Template = True
 ---
 comment: |
@@ -103,9 +111,9 @@ comment: |
 id: Motion to reconsider template
 continue button field: Motion_to_Reconsider_Template_intro
 question: |
-  Motion to reconsider template
+  Motion to Reconsider
 subquestion: |
-  Motion to reconsider template
+  TO DO
 ---
 id: Review your form before you sign it
 continue button field: Motion_to_Reconsider_Template_preview_question
@@ -120,21 +128,21 @@ subquestion: |
 ---
 id: trial court docket number
 question: |
-  What is the trial court docket number for your case?
+  What is the **Trial Court** docket number for your case?
 fields:
-  - 'Trial court docket number': trial_court_docket_number
+  - 'no label': trial_court_docket_number
 
 ---
 id: appeals court docket number
 question: |
-  What is the Appeals Court docket number for your case?
+  What is the **Appeals Court** docket number for your case?
 fields:
-  - 'Appeals court docket number': appeals_court_docket_number
+  - 'no label': appeals_court_docket_number
 
 ---
 id: record appendix
 question: |
-  You are required to submit copies of relevant Trial Court documents. 
+  You are required to submit copies of relevant **Trial Court** documents. 
 subquestion: |  
   Examples include: 
   
@@ -145,8 +153,6 @@ subquestion: |
     * your answer
     
     * the judgment
-    
-    * filings related to your Motion to Stay in the Trial Court.
     
   If you entered into an agreement for judgment, include a copy of the agreement for judgment.
 fields:
@@ -209,18 +215,41 @@ validation code: |
     # Make sure the "instanceName" shows the correct position in the list,
     # instead of showing a nested DAFileList's instanceName
     exhibits[i].instanceName = temp_name
----
-id: Screen four
+--- 
+id: method of service
 question: |
-  Screen four
+  How will you deliver the required copies of the motion, memorandum, and supporting materials to the plaintiffs' attorney(s)?
+subquestion: |
+  You are required to provide a copy of this motion, memorandum, and supporting materials to the plaintiffs' attorney(s).
+  
+  If the plaintiff does not have an attorney, you are required to serve a copy on the self-represented plaintiff.  
+  
+  You should not provide a copy of your Affidavit of Indigency, if any, to anyone except the Appeals Court.  
+field: method_of_service
+dropdown:
+  - Efile and serve (efilema.com): efile and serve (efilema.com)
+  - Email: email
+  - Mail: mail
+  - Hand delivery: hand delivery
+---
+id: parties to be served
+question: |
+  List the name and address (or email address) of each attorney or self-represented party that you will deliver copies of your motion, memorandum, and supporting materials to.
+subquestion: |
+  If you are serving more than one attorney or party, you may list more than one.
 fields:
-  - 'Parties to be served': parties_to_be_served
-    input type: area
-
-  - 'Method of service': method_of_service
-
-  - 'Date of service': service_date
-    datatype: date
+  - no label: parties_to_be_served
+    input type: area 
+    rows: 6
+---
+id: service date
+question: |
+  When will you deliver copies of your motion, memorandum, and supporting materials to the plaintiffs' attorney(s)?
+subquestion: |
+  You are required to provide a copy of this motion, memorandum, and supporting materials to the plaintiffs' attorney(s).
+fields:
+  - Date: service_date
+    datatype: date  
 ---
 progress: 100
 id: download
