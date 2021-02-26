@@ -52,6 +52,37 @@ sections:
 ---
 objects:
   - users: ALPeopleList.using(there_are_any=True)
+  - points_for_motion: DAList.using(object_type=DAObject, complete_attribute="complete", there_are_any=True)
+---
+code: |
+  points_for_motion[i].title
+  points_for_motion[i].reason
+  points_for_motion[i].kind
+  points_for_motion[i].explanation
+  points_for_motion[i].complete=True
+---
+question: |
+  Is there anything else wrong in the decision you want to tell us?
+subquestion: |
+  You already told us about:
+  
+  % for point in points_for_motion.complete_elements():
+  * ${ point.title }
+  % endfor
+yesno: points_for_motion.there_is_another
+---
+question: |
+  Tell us about the ${ ordinal(i) } point you want to make
+# break into different questions
+fields: 
+  - title: points_for_motion[i].title
+  - reason: points_for_motion[i].reason
+  - kind: points_for_motion[i].kind
+    choices: 
+      - reconsideration: reconsider
+      - modification: modify
+  - explanation:  points_for_motion[i].explanation
+    datatype: area
 ---
 mandatory: True
 id: main_order_Motion_to_Reconsider_Template
@@ -92,6 +123,8 @@ code: |
   trial_court
   trial_court_docket_number
   appeals_court_docket_number
+  
+  points_for_motion.gather()
   
   if motion_for == "reconsider":
     reconsider_point
