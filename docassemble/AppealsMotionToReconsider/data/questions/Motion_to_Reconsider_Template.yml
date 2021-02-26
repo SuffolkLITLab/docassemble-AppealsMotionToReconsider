@@ -54,36 +54,6 @@ objects:
   - users: ALPeopleList.using(there_are_any=True)
   - points_for_motion: DAList.using(object_type=DAObject, complete_attribute="complete", there_are_any=True)
 ---
-code: |
-  points_for_motion[i].title
-  points_for_motion[i].reason
-  points_for_motion[i].kind
-  points_for_motion[i].explanation
-  points_for_motion[i].complete=True
----
-question: |
-  Is there anything else wrong in the decision you want to tell us?
-subquestion: |
-  You already told us about:
-  
-  % for point in points_for_motion.complete_elements():
-  * ${ point.title }
-  % endfor
-yesno: points_for_motion.there_is_another
----
-question: |
-  Tell us about the ${ ordinal(i) } point you want to make
-# break into different questions
-fields: 
-  - title: points_for_motion[i].title
-  - reason: points_for_motion[i].reason
-  - kind: points_for_motion[i].kind
-    choices: 
-      - reconsideration: reconsider
-      - modification: modify
-  - explanation:  points_for_motion[i].explanation
-    datatype: area
----
 mandatory: True
 id: main_order_Motion_to_Reconsider_Template
 code: |
@@ -124,19 +94,9 @@ code: |
   trial_court_docket_number
   appeals_court_docket_number
   
+  point_for_motion_intro_screen
+  #motion_for
   points_for_motion.gather()
-  
-  if motion_for == "reconsider":
-    reconsider_point
-    explanation
-    
-  if motion_for == "modify":
-    modify_point
-    explanation
-  
-  if motion_for == "reconsider_and_modify":
-    reconsider_and_modify_point
-    explanation
     
   set_progress(12.5)
   method_of_service
@@ -180,61 +140,117 @@ question: |
   What is the **Appeals Court** docket number for your case?
 fields:
   - 'no label': appeals_court_docket_number
+#---
+#id: motion for
+#question: |
+#  Are you asking the Appeals Court to reconsider and/or modify its decision in your case?
+#subquestion: | 
+#  If you are asking the Court to reverse or otherwise change the outcome of your appeal, **that is a request to reconsider.**  
+#  
+#  If you are asking that an inaccuracy in the decision be corrected but the outcome to remain the same, **that is a request to modify.**
+#fields: 
+#  - no label: motion_for 
+#    datatype: radio
+#    choices:
+#      - I am seeking reconsideration of the decision: reconsider
+#      - I am seeking modification of the decision: modify
+#      - I am seeking reconsideration and modification of the decision: reconsider_and_modify
 ---
-id: motion for
+code: |
+  points_for_motion[i].title
+  points_for_motion[i].reason
+  points_for_motion[i].kind
+  points_for_motion[i].explanation
+  points_for_motion[i].complete=True
+---
+id: point for motion intro screen 
 question: |
-  Are you asking the Appeals Court to reconsider and/or modify its decision in your case?
-subquestion: | 
-  If you are asking the Court to reverse or otherwise change the outcome of your appeal, **that is a request to reconsider.**  
-  
-  If you are asking that an inaccuracy in the decision be corrected but the outcome to remain the same, **that is a request to modify.**
+ What you need, TO DO
+subquestion: |
+ TO DO
+continue button field: point_for_motion_intro_screen 
+---
+id: point for motion kind
+question: |
+  Tell us about the **${ ordinal(i) }** **kind** of point you want to make
 fields: 
-  - no label: motion_for 
-    datatype: radio
-    choices:
-      - I am seeking reconsideration of the decision: reconsider
-      - I am seeking modification of the decision: modify
-      - I am seeking reconsideration and modification of the decision: reconsider_and_modify
+  - Kind: points_for_motion[i].kind
+    input type: radio
+    choices: 
+      - Reconsideration: reconsider
+      - Modification: modify
 ---
-id: motion for reconsideration
+id: point for motion title
 question: |
-  Please describe, in detail, point that you are asking the court to reconsider. 
-subquestion: | 
-  For example, if you believed that the decision cited to a case that is inapplicable to your case, you would enter:  I am asking the court to reconsider applying the holding of Jane Doe v. John Doe, 123 Mass. 456 (2021) to this case.
-fields:
-  - no label: reconsider_point
-    input type: area
+  Give us a **short title** of the **${ ordinal(i) }** point you want to make
+fields: 
+  - Title: points_for_motion[i].title
+---
+id: point for motion reason
+question: |
+  Tell us about the **${ ordinal(i) }** point you want to make
+fields: 
+  - Point: points_for_motion[i].reason
+---
+id: point for motion explanation
+question: |
+  **Explain** the **${ ordinal(i) }** point you want to make
+fields: 
+  - Explanation:  points_for_motion[i].explanation
+    datatype: area
     rows: 6
 ---
-id: motion for modification
+id: add another point for motion
 question: |
-  Please describe in detail what you are asking the court to modify in its decision.
-subquestion: | 
-  For example, if the decision states that the complaint was filed on January 2, but it was really filed on December 31, you would enter: I am asking the court to modify its decision by changing the date in the first paragraph on page 2 from "January 2" to "December 31".
-fields:
-  - no label: modify_point
-    input type: area
-    rows: 6
+  Are there any other points wrong with the decision you want to tell us about?
+subquestion: |
+  You already told us about:
+  
+  % for point in points_for_motion.complete_elements():
+  * ${ point.title }
+  % endfor
+yesno: points_for_motion.there_is_another
 ---
-id: motion for reconsideration and modification
-question: |
-  TODO
-subquestion: | 
-  TODO
-fields:
-  - no label: reconsider_and_modify_point
-    input type: area
-    rows: 6
----
-id: explanation
-question: |
-  Explain the reasons why the court should [modify/reconsider] its decision. 
-subquestion: | 
-  The applicable appellate court rule requires that you "state with particularity the points of law or fact which it is contended the court has overlooked or misapprehended and shall contain such argument in support of the motion as the movant desires to present."  To comply with that rule, explain the reasons why the court should [modify/reconsider] its decision including citations to the record appendix (for points of fact) and cases, statutes and regulations (for points of law).
-fields:
-  - no label: explanation 
-    input type: area
-    rows: 6
+#---
+#id: motion for reconsideration
+#question: |
+#  Please describe, in detail, point that you are asking the court to reconsider. 
+#subquestion: | 
+#  For example, if you believed that the decision cited to a case that is inapplicable to your case, you would enter:  I am asking the court to reconsider applying the holding of Jane Doe v. John Doe, 123 Mass. 456 (2021) to this case.
+#fields:
+#  - no label: reconsider_point
+#    input type: area
+#    rows: 6
+#---
+#id: motion for modification
+#question: |
+#  Please describe in detail what you are asking the court to modify in its decision.
+#subquestion: | 
+#  For example, if the decision states that the complaint was filed on January 2, but it was really filed on December 31, you would enter: I am asking the court to modify its decision by changing the date in the first paragraph on page 2 from "January 2" to "December 31".
+#fields:
+#  - no label: modify_point
+#    input type: area
+#    rows: 6
+#---
+#id: motion for reconsideration and modification
+#question: |
+#  TODO
+#subquestion: | 
+#  TODO
+#fields:
+#  - no label: reconsider_and_modify_point
+#    input type: area
+#    rows: 6
+#---
+#id: explanation
+#question: |
+#  Explain the reasons why the court should [modify/reconsider] its decision. 
+#subquestion: | 
+#  The applicable appellate court rule requires that you "state with particularity the points of law or fact which it is contended the court has overlooked or misapprehended and shall contain such argument in support of the motion as the movant desires to present."  To comply with that rule, explain the reasons why the court should [modify/reconsider] its decision including citations to the record appendix (for points of fact) and cases, statutes and regulations (for points of law).
+#fields:
+#  - no label: explanation 
+#    input type: area
+#    rows: 6
 ---
 id: method of service
 question: |
@@ -269,7 +285,8 @@ subquestion: |
   You are required to provide a copy of this motion, memorandum, and supporting materials to the plaintiffs' attorney(s).
 fields:
   - Date: service_date
-    datatype: date  
+    datatype: date
+    min: ${ today() }
 ---
 progress: 100
 id: download
