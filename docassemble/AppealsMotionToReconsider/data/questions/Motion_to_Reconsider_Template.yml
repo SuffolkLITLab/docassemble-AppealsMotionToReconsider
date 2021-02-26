@@ -52,7 +52,6 @@ sections:
 ---
 objects:
   - users: ALPeopleList.using(there_are_any=True)
-  - exhibits: DAFileList.using(auto_gather=False, gathered=True)
 ---
 mandatory: True
 id: main_order_Motion_to_Reconsider_Template
@@ -82,18 +81,29 @@ code: |
   # Below sets the user_role by asking a question.
   # You can set user_role directly instead to either 'plaintiff' or 'defendant'
   user_ask_role
+  other_parties.there_are_any = True 
+  
   plaintiffs.gather()
   plaintiffs[0].address.address
+  
   defendants.gather()
   defendants[0].address.address
-  other_parties.there_are_any = True
   
   trial_court
   trial_court_docket_number
   appeals_court_docket_number
   
-  if has_evidence:
-    review_exhibits
+  if motion_for == "reconsider":
+    reconsider_point
+    explanation
+    
+  if motion_for == "modify":
+    modify_point
+    explanation
+  
+  if motion_for == "reconsider_and_modify":
+    reconsider_and_modify_point
+    explanation
     
   set_progress(12.5)
   method_of_service
@@ -131,91 +141,68 @@ question: |
   What is the **Trial Court** docket number for your case?
 fields:
   - 'no label': trial_court_docket_number
-
 ---
 id: appeals court docket number
 question: |
   What is the **Appeals Court** docket number for your case?
 fields:
   - 'no label': appeals_court_docket_number
-
 ---
-id: record appendix
+id: motion for
 question: |
-  You are required to submit copies of relevant **Trial Court** documents. 
-subquestion: |  
-  Examples include: 
+  Are you asking the Appeals Court to reconsider and/or modify its decision in your case?
+subquestion: | 
+  If you are asking the Court to reverse or otherwise change the outcome of your appeal, **that is a request to reconsider.**  
   
-    * the Trial Court's docket 
-    
-    * the complaint
-    
-    * your answer
-    
-    * the judgment
-    
-  If you entered into an agreement for judgment, include a copy of the agreement for judgment.
+  If you are asking that an inaccuracy in the decision be corrected but the outcome to remain the same, **that is a request to modify.**
+fields: 
+  - no label: motion_for 
+    datatype: radio
+    choices:
+      - I am seeking reconsideration of the decision: reconsider
+      - I am seeking modification of the decision: modify
+      - I am seeking reconsideration and modification of the decision: reconsider_and_modify
+---
+id: motion for reconsideration
+question: |
+  Please describe, in detail, point that you are asking the court to reconsider. 
+subquestion: | 
+  For example, if you believed that the decision cited to a case that is inapplicable to your case, you would enter:  I am asking the court to reconsider applying the holding of Jane Doe v. John Doe, 123 Mass. 456 (2021) to this case.
 fields:
-  - Do you have any documents to share with the judge?: has_evidence
-    datatype: yesnoradio
-  - I state that filing a complete record appendix is impracticable.: no_record_statement
-    datatype: yesno
-    show if: 
-      variable: has_evidence      
-      is: False
-  - Tap "browse" and choose all of the documents you want to upload at once. You can edit or add additional documents on the next screen.: exhibits
-    datatype: files
-    show if: has_evidence
-    maximum image size: 1024
-    image upload type: jpeg    
-    accept: |
-      "image/*, image/png,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf,.pdf"
-validation code: |
-  if has_evidence and sum(exhibit.size_in_bytes() for exhibit in exhibits) > (15 * 1024 * 1024):
-    validation_error("Please upload a file smaller than 15 MB.")
-  if not has_evidence and not no_record_statement: 
-    validation_error("You must select the box.")
+  - no label: reconsider_point
+    input type: area
+    rows: 6
 ---
-id: review exhibits
+id: motion for modification
 question: |
-  Review your exhibits
-subquestion: |
-  Look at the exhibits below. If you want to change the order, use the arrows
-  to move an exhibit up or down in the list. Click "delete" or "add another"
-  to change which exhibits you send to the court.
-  
-  ${ exhibits.table }
-  
-  ${exhibits.add_action() }
-continue button field: review_exhibits
----
-table: exhibits.table
-rows: exhibits
-allow reordering: True
-columns:
-  - File name: showifdef(row_item.attr_name('filename'))
-  # - Size: row_item.size_in_bytes() / 1024 / 1024
-  - Thumbnail: row_item.show(width="100px")  
-delete buttons: True
----
-id: add additional document
-question: |
-  Exhibit document ${i+1}  
+  Please describe in detail what you are asking the court to modify in its decision.
+subquestion: | 
+  For example, if the decision states that the complaint was filed on January 2, but it was really filed on December 31, you would enter: I am asking the court to modify its decision by changing the date in the first paragraph on page 2 from "January 2" to "December 31".
 fields:
-  - no label: exhibits[i]
-    datatype: file
-    accept: |
-      "image/*, image/png,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf,.pdf"   
-validation code: |
-  # Upload field creates a DAFileList
-  # We want it to be a plain DAFile instead
-  if isinstance(exhibits[i], DAFileList):
-    temp_name = exhibits[i].instanceName
-    exhibits[i] = next(iter(exhibits[i]))
-    # Make sure the "instanceName" shows the correct position in the list,
-    # instead of showing a nested DAFileList's instanceName
-    exhibits[i].instanceName = temp_name
---- 
+  - no label: modify_point
+    input type: area
+    rows: 6
+---
+id: motion for reconsideration and modification
+question: |
+  TODO
+subquestion: | 
+  TODO
+fields:
+  - no label: reconsider_and_modify_point
+    input type: area
+    rows: 6
+---
+id: explanation
+question: |
+  Explain the reasons why the court should [modify/reconsider] its decision. 
+subquestion: | 
+  The applicable appellate court rule requires that you "state with particularity the points of law or fact which it is contended the court has overlooked or misapprehended and shall contain such argument in support of the motion as the movant desires to present."  To comply with that rule, explain the reasons why the court should [modify/reconsider] its decision including citations to the record appendix (for points of fact) and cases, statutes and regulations (for points of law).
+fields:
+  - no label: explanation 
+    input type: area
+    rows: 6
+---
 id: method of service
 question: |
   How will you deliver the required copies of the motion, memorandum, and supporting materials to the plaintiffs' attorney(s)?
@@ -297,14 +284,6 @@ review:
     button: |
       **Method of service**:
       ${ method_of_service }
-  - Edit: exhibits
-    button: |
-      **Exhibits**:
-      ${ exhibits }
-  - Edit: has_evidence
-    button: |
-      **Has evidence**:
-      ${ word(yesno(has_evidence)) }
   - Edit: trial_court_docket_number
     button: |
       **Trial court docket number**:
