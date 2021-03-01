@@ -114,9 +114,47 @@ comment: |
 id: Motion to reconsider template
 continue button field: Motion_to_Reconsider_Template_intro
 question: |
+  Description of Motion to Reconsider
+subquestion: |
+  Purpose of this form:
+    * You can use this form to file a motion for reconsideration or modification of decision. 
+    * You can file the motion within 14 days after the date of the decision of the appellate court unless the time is changed by order. 
+    * You shall state particular points of law or fact which was overlooked or misapprehended by the court. For example, the color of the car was purple and not blue
+  
+  This form is NOT used:
+    * For oral argument in support
+    * For a real-world change of circumstances
+    * For changing the actual outcome of any case decision
+    * For changing arguments in court. For example, if you made an argument and the appeals court did not accept it, you should appeal to SJC
+   For more information: 
+   
+  This form cannot be directly emailed to the Supreme Judicial Court. For more information, contact the Supreme Judicial Court Clerk's office: (617) 557-1020.
+continue button field: Motion_to_Reconsider_Template_intro
+---
+comment: |
+  This question is used to introduce your interview. Please customize
+id: Motion to reconsider template
+continue button field: Motion_to_Reconsider_Template_intro
+question: |
   Motion to Reconsider
 subquestion: |
-  TO DO
+  Before using this form, here is a few things to prepare:
+    
+  If you have not already done so, you can use this form to download a Notice of Appeal and file a Waiver of Appeal Bond. 
+  
+  To use this form, you will need relevant Trial Court documents including:
+  
+    * the Trial Court's docket
+    
+    * the complaint
+    
+    * your answer
+    
+    * the judgment
+    
+    * the record appendix
+  
+continue button field: Motion_to_Reconsider_Template_intro
 ---
 id: Review your form before you sign it
 continue button field: Motion_to_Reconsider_Template_preview_question
