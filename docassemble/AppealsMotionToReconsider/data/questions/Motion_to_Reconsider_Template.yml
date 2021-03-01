@@ -62,7 +62,8 @@ code: |
   # delete the `mandatory: True` specifier or this whole block.
   al_intro_screen  # Organization intro screen/splash screen
   # Introduction to this specific interview
-  Motion_to_Reconsider_Template_intro
+  Motion_to_Reconsider_intro
+  Motion_to_Reconsider_second_intro
   # Trigger the whole interview order block to control question order
   interview_order_Motion_to_Reconsider_Template
   signature_date
@@ -112,37 +113,38 @@ code: |
 comment: |
   This question is used to introduce your interview. Please customize
 id: Motion to reconsider template
-continue button field: Motion_to_Reconsider_Template_intro
+continue button field: Motion_to_Reconsider_intro
 question: |
-  Description of Motion to Reconsider
+  What you need to know
 subquestion: |
-  Purpose of this form:
-    * You can use this form to file a motion for reconsideration or modification of decision. 
-    * You can file the motion within 14 days after the date of the decision of the appellate court unless the time is changed by order. 
-    * You shall state particular points of law or fact which was overlooked or misapprehended by the court. For example, the color of the car was purple and not blue
+  This form is used for:
   
-  This form is NOT used:
-    * For oral argument in support
-    * For a real-world change of circumstances
-    * For changing the actual outcome of any case decision
-    * For changing arguments in court. For example, if you made an argument and the appeals court did not accept it, you should appeal to SJC
-   For more information: 
+    * You can use this form to file a motion for reconsideration or modification of decision. 
+  
+  This form is **not** used for:
+    
+    * A real-world change of circumstances
+    
+    * Changing the actual outcome of any decision
+    
+    * Changing arguments made in court
+   
+  For more information on what you need to file a Motion to Reconsider, view the [Appellate Procedure for Rule 27](https://www.mass.gov/rules-of-appellate-procedure/appellate-procedure-rule-27-motion-for-reconsideration-or-modification).
    
   This form cannot be directly emailed to the Supreme Judicial Court. For more information, contact the Supreme Judicial Court Clerk's office: (617) 557-1020.
-continue button field: Motion_to_Reconsider_Template_intro
 ---
 comment: |
   This question is used to introduce your interview. Please customize
 id: Motion to reconsider template
-continue button field: Motion_to_Reconsider_Template_intro
+continue button field: Motion_to_Reconsider_second_intro
 question: |
   Motion to Reconsider
 subquestion: |
-  Before using this form, here is a few things to prepare:
+  You can file this motion within 14 days after the date of the decision of the Court, unless the time is changed by order. 
     
-  If you have not already done so, you can use this form to download a Notice of Appeal and file a Waiver of Appeal Bond. 
+  You must state the particular points of law or fact which were overlooked or misapprehended by the Court.
   
-  To use this form, you will need relevant Trial Court documents including:
+  To use this form, you will need the relevant Trial and Appeals Court documents, including:
   
     * the Trial Court's docket
     
@@ -153,8 +155,7 @@ subquestion: |
     * the judgment
     
     * the record appendix
-  
-continue button field: Motion_to_Reconsider_Template_intro
+
 ---
 id: Review your form before you sign it
 continue button field: Motion_to_Reconsider_Template_preview_question
