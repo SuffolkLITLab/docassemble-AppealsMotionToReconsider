@@ -117,9 +117,7 @@ continue button field: Motion_to_Reconsider_intro
 question: |
   What you need to know
 subquestion: |
-  This form is used for:
-  
-    * You can use this form to file a motion for reconsideration or modification of decision. 
+  You can use this form to file a Motion for {Reconsideration} and/or {Modification}.
   
   This form is **not** used for:
     
@@ -129,20 +127,24 @@ subquestion: |
     
     * Changing arguments made in court
    
-  For more information on what you need to file a Motion to Reconsider, view the [Appellate Procedure for Rule 27](https://www.mass.gov/rules-of-appellate-procedure/appellate-procedure-rule-27-motion-for-reconsideration-or-modification).
+  For more information on what you need to file a Motion for Reconsideration and/or Modification, view the [Appellate Procedure for Rule 27](https://www.mass.gov/rules-of-appellate-procedure/appellate-procedure-rule-27-motion-for-reconsideration-or-modification).
    
   This form cannot be directly emailed to the Supreme Judicial Court. For more information, contact the Supreme Judicial Court Clerk's office: (617) 557-1020.
+
+terms:
+  Reconsideration: |
+    If you are asking the Court to reverse or otherwise change the outcome of your appeal.  
+  Modification: |
+    If you are asking that an inaccuracy in the decision be corrected but the outcome to remain the same.
 ---
 comment: |
   This question is used to introduce your interview. Please customize
 id: Motion to reconsider template
 continue button field: Motion_to_Reconsider_second_intro
 question: |
-  Motion to Reconsider
+  Motion for Reconsideration and/or Modification
 subquestion: |
-  You can file this motion within 14 days after the date of the decision of the Court, unless the time is changed by order. 
-    
-  You must state the particular points of law or fact which were overlooked or misapprehended by the Court.
+  You can file a Motion for Reconsideration and/or Modification within 14 days after the date of the Court's decisions, unless the time is changed by order.
   
   To use this form, you will need the relevant Trial and Appeals Court documents, including:
   
@@ -204,9 +206,24 @@ code: |
 ---
 id: point for motion intro screen 
 question: |
- What you need, TO DO
+ What you need
 subquestion: |
- TO DO
+  TO DO: Explain the loop to the users
+
+  You must state the particular points of law or fact which were overlooked or misapprehended by the Court.
+  
+  To use this form, you will need the relevant Trial and Appeals Court documents, including:
+  
+    * the Trial Court's docket
+    
+    * the complaint
+    
+    * your answer
+    
+    * the judgment
+    
+    * the record appendix
+
 continue button field: point_for_motion_intro_screen 
 ---
 id: point for motion kind
