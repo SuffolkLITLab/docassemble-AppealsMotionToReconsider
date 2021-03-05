@@ -82,6 +82,10 @@ code: |
   nav.set_section('review_Motion_to_Reconsider_Template')
   # Below sets the user_role by asking a question.
   # You can set user_role directly instead to either 'plaintiff' or 'defendant'
+  
+  if appellate_court_decision_date_passed:
+    appellate_court_decision_date_passed_continue_anyway
+  
   user_ask_role
   other_parties.there_are_any = True 
   
@@ -158,6 +162,31 @@ subquestion: |
     
     * the record appendix
 
+---
+id: 14 days
+question: |
+  Was the Appeals Court decision made before ${ format_date(current_datetime() - date_interval(days=14) ) }?
+fields:
+  - no label: appellate_court_decision_date_passed
+    datatype: yesnoradio 
+---
+id: 14 days warning
+question: |
+  Warning
+subquestion: |
+  **Unless the time is shortened or enlarged by order, you must submit your Motion for Reconsideration and/or Modification within 14 days of the Appeals Court decision.**
+  
+  You said the date of the Appeals Court decision was made before **${ format_date( current_datetime() - date_interval(days=14) ) }**. That was more than 14 days ago.
+  
+  For more information, view the [Appellate Procedure for Rule 27](https://www.mass.gov/rules-of-appellate-procedure/appellate-procedure-rule-27-motion-for-reconsideration-or-modification).
+    
+  You can still proceed with your Motion for Reconsideration and/or Modification, but it may not be allowed because you are submitting it more than 14 days after the Appeals Court decision.
+buttons:
+  - Keep going:
+      code: |
+        appellate_court_decision_date_passed_continue_anyway = True  
+  - Restart: restart
+  - Exit: exit
 ---
 id: Review your form before you sign it
 continue button field: Motion_to_Reconsider_Template_preview_question
