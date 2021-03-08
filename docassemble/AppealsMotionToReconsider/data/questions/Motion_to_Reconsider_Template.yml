@@ -201,15 +201,19 @@ subquestion: |
 ---
 id: trial court docket number
 question: |
-  What is the **Trial Court** docket number for your case?
+  What is the **Trial Court** {docket number} for your case?
 fields:
   - 'no label': trial_court_docket_number
+terms:
+  docket number: This number is is the official identifying number/identification for the case.  It gives you a general idea of the main issues involved in the case.
 ---
 id: appeals court docket number
 question: |
-  What is the **Appeals Court** docket number for your case?
+  What is the **Appeals Court** {docket number} for your case?
 fields:
   - 'no label': appeals_court_docket_number
+terms:
+  docket number: This number is is the official identifying number/identification for the case.  It gives you a general idea of the main issues involved in the case.
 #---
 #id: motion for
 #question: |
@@ -227,9 +231,9 @@ fields:
 #      - I am seeking reconsideration and modification of the decision: reconsider_and_modify
 ---
 code: |
+  points_for_motion[i].kind
   points_for_motion[i].title
   points_for_motion[i].reason
-  points_for_motion[i].kind
   points_for_motion[i].explanation
   points_for_motion[i].complete=True
 ---
@@ -276,6 +280,7 @@ question: |
   Tell us about the **${ ordinal(i) }** point you want to make
 fields: 
   - Point: points_for_motion[i].reason
+    input type: area
 ---
 id: point for motion explanation
 question: |
