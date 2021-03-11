@@ -262,12 +262,19 @@ continue button field: point_for_motion_intro_screen
 id: point for motion kind
 question: |
   Tell us about the **${ ordinal(i) }** **kind** of point you want to make
+subquestion: |
+  You can use this form to file a Motion for {Reconsideration} and/or {Modification}.
 fields: 
   - Kind: points_for_motion[i].kind
     input type: radio
     choices: 
       - Reconsideration: reconsider
       - Modification: modify
+terms:
+  Reconsideration: |
+    If you are asking the Court to reverse or otherwise change the outcome of your appeal.  
+  Modification: |
+    If you are asking that an inaccuracy in the decision be corrected but the outcome to remain the same.
 ---
 id: point for motion title
 question: |
