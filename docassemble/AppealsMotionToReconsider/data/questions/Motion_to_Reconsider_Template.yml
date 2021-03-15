@@ -201,19 +201,30 @@ subquestion: |
 ---
 id: trial court docket number
 question: |
-  What is the **Trial Court** {docket number} for your case?
+  What is the **Trial Court** docket number for your case?
+subquestion: |
+  Below is a sample showing where to find Trial Court docket number.
+ 
+  [${Reconsider.show(width='30em')}](${Reconsider.url_for()})
 fields:
   - 'no label': trial_court_docket_number
-terms:
-  docket number: This number is is the official identifying number/identification for the case.  It gives you a general idea of the main issues involved in the case.
+---
+objects:
+  - Reconsider: DAStaticFile.using(filename='Reconsider.png',        alt_text='Reconsider')
 ---
 id: appeals court docket number
 question: |
-  What is the **Appeals Court** {docket number} for your case?
+  What is the **Appeals Court** docket number for your case?
+subquestion: |
+  Below is a sample showing where to find Appeals Court docket number.
+ 
+  [${Reconsider.show(width='28em')}](${Reconsider.url_for()})
 fields:
   - 'no label': appeals_court_docket_number
-terms:
-  docket number: This number is is the official identifying number/identification for the case.  It gives you a general idea of the main issues involved in the case.
+---
+objects:
+  - Reconsider: DAStaticFile.using(filename='Reconsider.png',        alt_text='Reconsider')
+---
 #---
 #id: motion for
 #question: |
