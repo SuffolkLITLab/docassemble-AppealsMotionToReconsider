@@ -199,28 +199,22 @@ subquestion: |
   
   Remember to come back to this window to continue and sign your form.
 ---
-id: trial court docket number
+id: docket numbers
 question: |
-  What is the **Trial Court** docket number for your case?
+  What are your docket numbers?
 subquestion: |
-  Below is a sample showing where to find Trial Court docket number.
+  You should have received an e-notice or notice from the Court. 
+  
+  If you provided the Court with an email address in the past, you should have received a copy of the notice as an e-notice to that email address.
+  
+  If you did not provide the Court with an email address in the past, you should have received a physical copy of the notice in the mail to the address you provided the Court.  
+  
+  Here is an example of what the e-notice or notice looks like: 
  
-  [${Reconsider.show(width='30em')}](${Reconsider.url_for()})
+  [${Reconsider.show(width='35em')}](${Reconsider.url_for()})
 fields:
-  - 'no label': trial_court_docket_number
----
-objects:
-  - Reconsider: DAStaticFile.using(filename='Reconsider.png',        alt_text='Reconsider')
----
-id: appeals court docket number
-question: |
-  What is the **Appeals Court** docket number for your case?
-subquestion: |
-  Below is a sample showing where to find Appeals Court docket number.
- 
-  [${Reconsider.show(width='28em')}](${Reconsider.url_for()})
-fields:
-  - 'no label': appeals_court_docket_number
+  - Appeals Court docket number: appeals_court_docket_number
+  - Trial Court docket number: trial_court_docket_number
 ---
 objects:
   - Reconsider: DAStaticFile.using(filename='Reconsider.png',        alt_text='Reconsider')
@@ -250,23 +244,23 @@ code: |
 ---
 id: point for motion intro screen 
 question: |
- What you need
+  Your point(s) of law
 subquestion: |
-  TO DO: Explain the loop to the users
+  Next, we are going to ask you about the point(s) of law you want to make. 
+  
+  We will ask you, in the following order: 
+  
+  1. What **kind** of point you want to make. (e.g., reconsideration)
+  
+  2. For a **short title** to desribe the point you want to make. (This will not go on your Motion. If you have multiple points, we will create a list of them for you to see each time you make a new point.)
+  
+  3. For the **point of law** you want to make. 
+  
+  4. For an **explanation** of the point of law you want to make. 
+  
+  If you have multiple points of law to make, we will keep asking you these questions, in this order, until you have finished making all of your points. 
 
-  You must state the particular points of law or fact which were overlooked or misapprehended by the Court.
-  
-  To use this form, you will need the relevant Trial and Appeals Court documents, including:
-  
-    * the Trial Court's docket
-    
-    * the complaint
-    
-    * your answer
-    
-    * the judgment
-    
-    * the record appendix
+  You must state the particular point(s) of law or fact which were overlooked or misapprehended by the Court.
 
 continue button field: point_for_motion_intro_screen 
 ---
@@ -290,6 +284,8 @@ terms:
 id: point for motion title
 question: |
   Give us a **short title** of the **${ ordinal(i) }** point you want to make
+subquestion: |
+  This will not go on your Motion. If you have multiple points, we will create a list of them for you to see each time you make a new point.
 fields: 
   - Title: points_for_motion[i].title
 ---
