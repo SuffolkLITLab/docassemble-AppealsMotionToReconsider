@@ -358,9 +358,9 @@ yesno: points_for_motion.there_is_another
 ---
 id: method of service
 question: |
-  How will you deliver the required copies of the motion, memorandum, and supporting materials to the plaintiffs' attorney(s)?
+  How will you deliver the required copies of the motion, memorandum, and supporting materials to the other party?
 subquestion: |
-  You are required to provide a copy of this motion, memorandum, and supporting materials to the plaintiffs' attorney(s).
+  You are required to provide a copy of this motion, memorandum, and supporting materials to the other party.
   
   If the plaintiff does not have an attorney, you are required to serve a copy on the self-represented plaintiff.  
   
@@ -384,9 +384,9 @@ fields:
 ---
 id: service date
 question: |
-  When will you deliver copies of your motion, memorandum, and supporting materials to the plaintiffs' attorney(s)?
+  When will you deliver copies of your motion, memorandum, and supporting materials to the other party?
 subquestion: |
-  You are required to provide a copy of this motion, memorandum, and supporting materials to the plaintiffs' attorney(s).
+  You are required to provide a copy of this motion, memorandum, and supporting materials to the other party.
 fields:
   - Date: service_date
     datatype: date
