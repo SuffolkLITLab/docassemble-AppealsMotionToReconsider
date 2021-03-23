@@ -122,9 +122,15 @@ continue button field: Motion_to_Reconsider_intro
 question: |
   What you need to know
 subquestion: |
-  You can use this form to file a Motion for {Reconsideration} and/or {Modification}.
+  **You can use this form to file a Motion for:**
   
-  This form is **not** used for:
+    1. Reconsideration, if you are asking the Court to reverse or otherwise change the outcome of your Appeal.
+    
+    2. Modification, if you are asking that an inaccuracy in the decision be corrected but the outcome to remain the same.
+    
+    3. Reconsideration and Modification, if you are asking the Court for both as defined above.
+  
+  **This form is *not* used for:**
     
     * A real-world change of circumstances
     
@@ -135,12 +141,6 @@ subquestion: |
   For more information on what you need to file a Motion for Reconsideration and/or Modification, view the [Appellate Procedure for Rule 27](https://www.mass.gov/rules-of-appellate-procedure/appellate-procedure-rule-27-motion-for-reconsideration-or-modification).
    
   This form cannot be directly emailed to the Supreme Judicial Court. For more information, contact the Supreme Judicial Court Clerk's office: (617) 557-1020.
-
-terms:
-  Reconsideration: |
-    If you are asking the Court to reverse or otherwise change the outcome of your appeal.  
-  Modification: |
-    If you are asking that an inaccuracy in the decision be corrected but the outcome to remain the same.
 ---
 comment: |
   This question is used to introduce your interview. Please customize
@@ -202,17 +202,19 @@ subquestion: |
 ---
 id: docket numbers
 question: |
-  What are your docket numbers?
+  Your docket numbers
 subquestion: |
   You should have received an e-notice or notice from the Court. 
   
-  If you provided the Court with an email address in the past, you should have received a copy of the notice as an e-notice to that email address.
+  **If you provided the Court with an email address**, you should have received a copy of the notice as an e-notice to that email address.
   
-  If you did not provide the Court with an email address in the past, you should have received a physical copy of the notice in the mail to the address you provided the Court.  
+  **If you did *not* provide the Court with an email address**, you should have received a physical copy of the notice in the mail to the address you provided the Court.  
   
   Here is an example of what the e-notice or notice looks like: 
  
   [${Reconsider.show(width='35em')}](${Reconsider.url_for()})
+  
+  **What are your docket numbers?**
 fields:
   - Appeals Court docket number: appeals_court_docket_number
   - Trial Court docket number: trial_court_docket_number
@@ -359,11 +361,11 @@ yesno: points_for_motion.there_is_another
 ---
 id: method of service
 question: |
-  How will you deliver the required copies of the motion, memorandum, and supporting materials to the other party?
+  How will you deliver the required copies of the motion, memorandum, and supporting materials to ${ other_parties }?
 subquestion: |
-  You are required to provide a copy of this motion, memorandum, and supporting materials to the other party.
+  You are required to provide a copy of this motion, memorandum, and supporting materials to ${ other_parties }.
   
-  If the plaintiff does not have an attorney, you are required to serve a copy on the self-represented plaintiff.  
+  If ${ other_parties } does not have an attorney, you are required to serve a copy on ${ other_parties }.  
   
   You should not provide a copy of your Affidavit of Indigency, if any, to anyone except the Appeals Court.  
 field: method_of_service
@@ -385,9 +387,9 @@ fields:
 ---
 id: service date
 question: |
-  When will you deliver copies of your motion, memorandum, and supporting materials to the other party?
+  When will you deliver copies of your motion, memorandum, and supporting materials to ${ other_parties }?
 subquestion: |
-  You are required to provide a copy of this motion, memorandum, and supporting materials to the other party.
+  You are required to provide a copy of this motion, memorandum, and supporting materials to ${ other_parties }.
 fields:
   - Date: service_date
     datatype: date
