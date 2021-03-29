@@ -86,15 +86,20 @@ code: |
   
   if appellate_court_decision_date_passed:
     appellate_court_decision_date_passed_continue_anyway
-  
+
+  users[0].name.first
+  users[0].address.address
+  users[0].mobile_number
+  user_needs_interpreter
+  users.there_is_another = False
+  users.gathered = True
   user_ask_role
-  other_parties.there_are_any = True 
-  
+  other_parties.there_are_any = True
   plaintiffs.gather()
   plaintiffs[0].address.address
-  
   defendants.gather()
   defendants[0].address.address
+  other_parties.gather()
   
   trial_court
   trial_court_docket_number
