@@ -45,6 +45,10 @@ code: |
 code: |
   al_form_type = 'appeal'
 ---
+##temporary for send to court code
+code: |
+  package_title = 'Motion to Reconsider'
+---
 features:
   navigation: True
 ---
@@ -398,20 +402,66 @@ fields:
   - Date: service_date
     datatype: date
     min: ${ today() }
+#---
+#progress: 100
+#id: download
+#event: Motion_to_Reconsider_Template_download
+#question: |
+#  Your form is ready to download.
+#subquestion: |
+#  Thank you ${users}. Your form is ready to download and deliver.
+#  
+#  Below is a preview of your form.
+#  
+#  ${ al_user_bundle.download_list_html() }
+#  
+#  ${ al_user_bundle.send_button_html() }
 ---
-progress: 100
-id: download
+id: download form
 event: Motion_to_Reconsider_Template_download
+decoration: file-download
 question: |
-  Your form is ready to download.
+  % if not defined('email_success') or not email_success:
+  Review, Download, and Send Form
+  % else:
+  Form delivered
+  % endif
 subquestion: |
-  Thank you ${users}. Your form is ready to download and deliver.
+  % if not defined('email_success') or not email_success:
+  Your form is ready to send to the Appeals Court. It is not delivered until you complete the delivery process.
+
+  **To deliver [:file-download: Your Motion]( ${ al_user_bundle.as_pdf(key='final').url_for()} ) to the the Appeals Court:**
   
-  Below is a preview of your form.
+  1. Click "View" below to open the form in a new window.
+  1. Click "Download" below to save or print a copy for your records.
+  1. Click "Submit to the Massachusetts Appeals Court" to send your Motion to the the Appeals Court. 
+
+  You will have a chance to add instructions to the clerk and see the cover page before final delivery.
+  % else:
+  
+  If you do not hear from the court in 1 business day, call the Appeals Court Clerk's Office: 617-921-4443 
+  
+  The Appeals Court Clerk's Office is open:  
+  Monday - Friday  
+  8:30am - 4:30pm
+  % endif
+  
+  % if not defined('email_success') or not email_success:
+    ${ action_button_html( url_action('form_delivery_complete'), id_tag="submitToCourt", label="Submit to the Massachusetts Appeals Court", icon=send_icon, size="md", color="primary")}
+    
+  % else:
+    Your email has already been delivered to the Appeals Court.
+    
+  [:file-download: Your Motion]( ${ al_user_bundle.as_pdf(key='final').url_for()} )
+ 
+  % endif
   
   ${ al_user_bundle.download_list_html() }
   
   ${ al_user_bundle.send_button_html() }
+
+progress: 100
+section: download
 ---
 objects:
   - Motion_to_Reconsider_Template_attachment: ALDocument.using(title="Motion to reconsider template", filename="Motion_to_Reconsider_Template", enabled=True, has_addendum=False)
