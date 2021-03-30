@@ -1,0 +1,459 @@
+include:
+  - docassemble.AssemblyLine:al_package.yml
+  - docassemble.MassAccess:massaccess.yml
+  - docassemble.MassAppealsCourt:appeals-basic-questions.yml
+---
+comment: |
+  The metadata section controls the tab title and saved interview title. You can delete this section if you include this YAML file in another YAML file.
+metadata:
+  title: |
+    Motion to Reconsider
+  short title: |
+    Motion to Reconsider
+---
+comment: |
+  This section is used by AssemblyLine to control how some of the questions work.
+mandatory: True
+code: |
+  interview_metadata # make sure we initialize the object
+  if not defined("interview_metadata['Motion_to_Reconsider']"):
+    interview_metadata.initializeObject('Motion_to_Reconsider')
+  interview_metadata['Motion_to_Reconsider'].update({
+    'title': 'Motion to Reconsider',
+    'short title': 'Motion to Reconsider',
+    'description': 'Motion to Reconsider',
+    'original_form': '',
+    'allowed courts': [
+      "Boston Municipal Court",
+      "District Court",
+      "Superior Court",
+      "Housing Court",
+      "Probate and Family Court",
+      "Juvenile Court",
+      "Land Court"
+    ],
+    'categories': [
+    ],
+    'logic block variable': 'Motion_to_Reconsider',
+    'attachment block variable': 'Motion_to_Reconsider_attachment',
+    'typical role': 'unknown',
+  })
+---
+code: |
+  interview_short_title = 'File a Motion to Reconsider'
+---
+code: |
+  al_form_type = 'appeal'
+---
+##temporary for send to court code
+code: |
+  package_title = 'Motion to Reconsider'
+---
+features:
+  navigation: True
+---
+sections:
+  - review_Motion_to_Reconsider: Review your answers
+---
+objects:
+  - users: ALPeopleList.using(there_are_any=True)
+  - points_for_motion: DAList.using(object_type=DAObject, complete_attribute="complete", there_are_any=True)
+---
+mandatory: True
+id: main_order_Motion_to_Reconsider
+code: |
+  # Controls the flow of the basic building blocks of the
+  # interview. To use this interview in another interview
+  # delete the `mandatory: True` specifier or this whole block.
+  al_intro_screen  # Organization intro screen/splash screen
+  # Introduction to this specific interview
+  Motion_to_Reconsider_intro
+  Motion_to_Reconsider_second_intro
+  # Trigger the whole interview order block to control question order
+  interview_order_Motion_to_Reconsider
+  signature_date
+  # Save (anonymized) interview statistics.
+  store_variables_snapshot(data={'zip': users[0].address.zip})
+  Motion_to_Reconsider_preview_question  # Pre-canned preview screen
+  basic_questions_signature_flow
+  users[0].signature
+  Motion_to_Reconsider_download
+---
+id: interview_order_Motion_to_Reconsider
+code: |
+  # This is a placeholder to control order of questions in this interview
+  # Set the allowed courts for this interview
+  allowed_courts = interview_metadata["Motion_to_Reconsider"]["allowed courts"]
+  nav.set_section('review_Motion_to_Reconsider')
+  # Below sets the user_role by asking a question.
+  # You can set user_role directly instead to either 'plaintiff' or 'defendant'
+  
+  if appellate_court_decision_date_passed:
+    appellate_court_decision_date_passed_continue_anyway
+
+  users[0].name.first
+  users[0].address.address
+  users[0].mobile_number
+  user_needs_interpreter
+  users.there_is_another = False
+  users.gathered = True
+  user_ask_role
+  other_parties.there_are_any = True
+  plaintiffs.gather()
+  plaintiffs[0].address.address
+  defendants.gather()
+  defendants[0].address.address
+  other_parties.gather()
+  
+  trial_court
+  trial_court_docket_number
+  appeals_court_docket_number
+  
+  point_for_motion_intro_screen
+  #motion_for
+  points_for_motion.gather()
+    
+  set_progress(12.5)
+  method_of_service
+  parties_to_be_served
+  service_date
+  
+  # Set the answer file name.
+  set_parts(subtitle=str(users))
+ 
+  set_progress(25.0)
+  interview_order_Motion_to_Reconsider = True
+---
+comment: |
+  This question is used to introduce your interview. Please customize
+id: Motion to Reconsider
+continue button field: Motion_to_Reconsider_intro
+question: |
+  What you need to know
+subquestion: |
+  **You can use this form to file a Motion for:**
+  
+    1. Reconsideration, if you are asking the Court to reverse or otherwise change the outcome of your Appeal.
+    
+    2. Modification, if you are asking that an inaccuracy in the decision be corrected but the outcome to remain the same.
+    
+    3. Reconsideration and Modification, if you are asking the Court for both as defined above.
+  
+  **This form is *not* used for:**
+    
+    * A real-world change of circumstances
+    
+    * Changing the actual outcome of any decision
+    
+    * Changing arguments made in court
+   
+  For more information on what you need to file a Motion for Reconsideration and/or Modification, view the [Appellate Procedure for Rule 27](https://www.mass.gov/rules-of-appellate-procedure/appellate-procedure-rule-27-motion-for-reconsideration-or-modification).
+   
+  This form cannot be directly emailed to the Supreme Judicial Court. For more information, contact the Supreme Judicial Court Clerk's office: (617) 557-1020.
+---
+comment: |
+  This question is used to introduce your interview. Please customize
+id: Motion to Reconsider
+continue button field: Motion_to_Reconsider_second_intro
+question: |
+  Motion for Reconsideration and/or Modification
+subquestion: |
+  You can file a Motion for Reconsideration and/or Modification within 14 days after the date of the Court's decisions, unless the time is changed by order.
+  
+  To use this form, you will need the relevant Trial and Appeals Court documents, including:
+  
+    * the Trial Court's docket
+    
+    * the complaint
+    
+    * your answer
+    
+    * the judgment
+    
+    * the record appendix
+
+---
+id: 14 days
+question: |
+  Did the Appeals Court make its {final decision} before **${ format_date(current_datetime() - date_interval(days=14) ) }**?
+subquestion: |
+  Unless the time is shortened or enlarged by order, you must submit your Motion for Reconsideration and/or Modification within **14 days** of the Appeals Court decision.
+fields:
+  - no label: appellate_court_decision_date_passed
+    datatype: yesnoradio
+terms:
+  final decision: |
+    This is different than Trial Court decision that you are appealing.   
+---
+id: 14 days warning
+question: |
+  Warning
+subquestion: |
+  **Unless the time is shortened or enlarged by order, you must submit your Motion for Reconsideration and/or Modification within 14 days of the Appeals Court decision.**
+  
+  You said the date of the Appeals Court decision was made before **${ format_date( current_datetime() - date_interval(days=14) ) }**. That was more than 14 days ago.
+  
+  To make a Motion for Enlargement of Time, visit our guided form [here](https://apps.suffolklitlab.org/run/appeal_enlarge_time/#/1).
+  
+  For more information, view the [Appellate Procedure for Rule 27](https://www.mass.gov/rules-of-appellate-procedure/appellate-procedure-rule-27-motion-for-reconsideration-or-modification).
+    
+  You can still proceed with your Motion for Reconsideration and/or Modification, but it may not be allowed because you are submitting it more than 14 days after the Appeals Court decision.
+buttons:
+  - Keep going:
+      code: |
+        appellate_court_decision_date_passed_continue_anyway = True  
+  - Restart: restart
+  - Exit: exit
+---
+id: Review your form before you sign it
+continue button field: Motion_to_Reconsider_preview_question
+question: |
+  Review your form before you sign it
+subquestion: |
+  Here is a preview of the form you'll sign on the next page. 
+  
+   ${ al_user_bundle.as_pdf(key='preview') }
+  
+  Remember to come back to this window to continue and sign your form.
+---
+id: docket numbers
+question: |
+  Your docket numbers
+subquestion: |
+  You should have received an e-notice or notice from the Appeals Court. 
+  
+  **If you provided the Appeals Court with an email address**, you would receive a copy of the notice as an e-notice to that email address.
+  
+  **If you did *not* provide the Appeals Court with an email address**, you would receive a physical copy of the notice in the mail to the address you provided the Appeals Court.  
+  
+  Here is an example of what the e-notice or notice looks like: 
+ 
+  [${Reconsider.show(width='35em')}](${Reconsider.url_for()})
+  
+  **What are your docket numbers?**
+fields:
+  - Appeals Court docket number: appeals_court_docket_number
+  - Trial Court docket number: trial_court_docket_number
+---
+objects:
+  - Reconsider: DAStaticFile.using(filename='Reconsider.png',        alt_text='Reconsider')
+---
+code: |
+  points_for_motion[i].kind
+  points_for_motion[i].reason
+  points_for_motion[i].explanation
+  points_for_motion[i].complete=True
+---
+id: point for motion intro screen 
+question: |
+  Your point(s) of law
+subquestion: |
+  Next, we are going to ask you about the point(s) of law you want to make. 
+  
+  We will ask you, in the following order: 
+  
+  1. What **kind** of point you want to make. (e.g., reconsideration)
+  
+  1. For the **point of law** you want to make. 
+  
+  1. For an **explanation** of the point of law you want to make. 
+  
+  If you have multiple points of law to make, we will keep asking you these questions, in this order, until you have finished making all of your points. 
+
+continue button field: point_for_motion_intro_screen 
+---
+id: point for motion kind
+question: |
+  Tell us about the **${ ordinal(i) }** kind of point you want to make
+subquestion: |
+  You can use this form to file a Motion for {Reconsideration} and/or {Modification}.
+fields: 
+  - Kind: points_for_motion[i].kind
+    input type: radio
+    choices: 
+      - Reconsideration: reconsider
+      - Modification: modify
+terms:
+  Reconsideration: |
+    If you are asking to reverse or otherwise change the outcome of your appeal.  
+  Modification: |
+    If you are asking that an inaccuracy in the decision be corrected but the outcome to remain the same.
+---
+id: point for motion reason
+question: |
+  Tell us about the **${ ordinal(i) }** point you want to make
+subquestion: |
+  You must state the particular point(s) of law or fact which were overlooked or misapprehended by the Appeals Court.
+fields: 
+  - no label: points_for_motion[i].reason
+    input type: area
+    rows: 2
+---
+id: point for motion explanation
+question: |
+  Explain the **${ ordinal(i) }** point you want to make
+subquestion: |
+  You must explain the particular point(s) of law or fact which were overlooked or misapprehended by the Appeals Court.
+fields: 
+  - no label:  points_for_motion[i].explanation
+    datatype: area
+    rows: 6
+---
+id: add another point for motion
+question: |
+  Are there any other points wrong with the decision you want to tell us about?
+subquestion: |
+  You already told us about:
+  
+  % for point in points_for_motion.complete_elements():
+  * ${ point.reason }
+  % endfor
+yesno: points_for_motion.there_is_another
+---
+id: method of service
+question: |
+  How will you deliver the required copies of the motion, memorandum, and supporting materials to ${ other_parties }?
+subquestion: |
+  You are required to provide a copy of this motion, memorandum, and supporting materials to ${ other_parties }.
+  
+  If ${ other_parties } does not have an attorney, you are required to serve a copy on ${ other_parties }.  
+  
+  You should not provide a copy of your Affidavit of Indigency, if any, to anyone except the Appeals Court.  
+field: method_of_service
+dropdown:
+  - Efile and serve (efilema.com): efile and serve (efilema.com)
+  - Email: email
+  - Mail: mail
+  - Hand delivery: hand delivery
+---
+id: parties to be served
+question: |
+  List the name and address (or email address) of each attorney or self-represented party that you will deliver copies of your motion, memorandum, and supporting materials to.
+subquestion: |
+  If you are serving more than one attorney or party, you may list more than one.
+fields:
+  - no label: parties_to_be_served
+    input type: area 
+    rows: 6
+---
+id: service date
+question: |
+  When will you deliver copies of your motion, memorandum, and supporting materials to ${ other_parties }?
+subquestion: |
+  You are required to provide a copy of this motion, memorandum, and supporting materials to ${ other_parties }.
+fields:
+  - Date: service_date
+    datatype: date
+    min: ${ today() }
+---
+id: download form
+event: Motion_to_Reconsider_download
+decoration: file-download
+question: |
+  % if not defined('email_success') or not email_success:
+  Review, Download, and Send Form
+  % else:
+  Form delivered
+  % endif
+subquestion: |
+  % if not defined('email_success') or not email_success:
+  Your form is ready to send to the Appeals Court. It is not delivered until you complete the delivery process.
+
+  **To deliver [:file-download: Your Motion]( ${ al_user_bundle.as_pdf(key='final').url_for()} ) to the the Appeals Court:**
+  
+  1. Click "View" below to open the form in a new window.
+  1. Click "Download" below to save or print a copy for your records.
+  1. Click "Submit to the Massachusetts Appeals Court" to send your Motion to the the Appeals Court. 
+
+  You will have a chance to add instructions to the clerk and see the cover page before final delivery.
+  % else:
+  
+  If you do not hear from the court in 1 business day, call the Appeals Court Clerk's Office: 617-921-4443 
+  
+  The Appeals Court Clerk's Office is open:  
+  Monday - Friday  
+  8:30am - 4:30pm
+  % endif
+  
+  % if not defined('email_success') or not email_success:
+    ${ action_button_html( url_action('form_delivery_complete'), id_tag="submitToCourt", label="Submit to the Massachusetts Appeals Court", icon=send_icon, size="md", color="primary")}
+    
+  % else:
+    **[:file-download: Your Motion]( ${ al_user_bundle.as_pdf(key='final').url_for()} )** has already been delivered to the Appeals Court.
+    
+ 
+  % endif
+  
+  ${ al_user_bundle.download_list_html() }
+  
+  ${ al_user_bundle.send_button_html() }
+
+progress: 100
+section: download
+---
+objects:
+  - Motion_to_Reconsider_attachment: ALDocument.using(title="Motion to Reconsider", filename="Motion_to_Reconsider", enabled=True, has_addendum=False)
+---
+objects:
+  - al_user_bundle: ALDocumentBundle.using(elements=[Motion_to_Reconsider_attachment], filename="Motion_to_Reconsider.pdf", title="All forms to download for your records")
+  - al_court_bundle: ALDocumentBundle.using(elements=[Motion_to_Reconsider_attachment], filename="Motion_to_Reconsider.pdf", title="All forms to download for your records")
+---
+attachment:
+    variable name: Motion_to_Reconsider_attachment[i]
+    name: Motion to Reconsider
+    filename: Motion-to-Reconsider
+    docx template file: Motion_to_Reconsider.docx
+---
+id: Motion_to_Reconsider review screen
+event: review_Motion_to_Reconsider
+question: |
+  Review Screen
+subquestion: |
+  Edit your answers below
+review: 
+  - Edit: parties_to_be_served
+    button: |
+      **Parties to be served**:
+      > ${ single_paragraph(parties_to_be_served) }
+  - Edit: appeals_court_docket_number
+    button: |
+      **Appeals court docket number**:
+      ${ appeals_court_docket_number }
+  - Edit: method_of_service
+    button: |
+      **Method of service**:
+      ${ method_of_service }
+  - Edit: trial_court_docket_number
+    button: |
+      **Trial court docket number**:
+      ${ trial_court_docket_number }
+  - Edit: service_date
+    button: |
+      **Date of service**:
+      ${ service_date }
+  - Edit: trial_court
+    button: |
+      **trial_court**:
+      ${ trial_court }
+  - Edit: users[0].signature
+    button: |
+      **users[0].signature**:
+      ${ users[0].signature }
+  - Edit: defendants[0].name.first
+    button: |
+      **defendants**
+
+      % for my_var in defendants:
+        * ${ my_var }
+      % endfor
+    # NOTE: a question block with 'defendants.revisit'
+    # lets the user edit all of the items at once
+  - Edit: plaintiffs[0].name.first
+    button: |
+      **plaintiffs**
+
+      % for my_var in plaintiffs:
+        * ${ my_var }
+      % endfor
+    # NOTE: a question block with 'plaintiffs.revisit'
+    # lets the user edit all of the items at once
