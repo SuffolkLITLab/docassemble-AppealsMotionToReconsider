@@ -40,7 +40,7 @@ code: |
   })
 ---
 code: |
-  interview_short_title = 'File a Motion to Reconsider'
+  interview_short_title = 'Ask the Appeals Court to look at your case again'
 ---
 code: |
   al_form_type = 'appeal'
@@ -133,23 +133,45 @@ comment: |
   This question is used to introduce your interview. Please customize
 id: Motion to Reconsider
 question: |
+  Motion to Reconsider, Motion to Modify, or Motion to Reconsider and Modify
+subquestion: |
+  File one of these motions if you need the Appeals Court to look at your case again because:  
+  
+  * the court's reasoning that led to the current order was wrong, 
+  * the court failed to consider evidence, or
+  * the judge should know about new information that affects the decision the court already made. 
+  
   What do you need help with?
 fields: 
   - no label: needs_help_with
     datatype: checkboxes
     choices: 
-      - Reconsideration: Reconsideration
-      - Modification: Modification
-      - A real-world change of circumstances: A real-world change of circumstances
-      - Changing the actual outcome of the decision: Changing the actual outcome of the decision
-      - Changing arguments made in court: Changing arguments made in court
+      - Reconsideration.: Reconsideration
+        help: If you need the Court to undo or change the previous decision in your Appeal.
+      - Modification.: Modification
+        help: If you need the court to correct some inaccuracy in the decision keep the outcome the same.
+      - A real-world change of circumstances.: A real-world change of circumstances
+        help: needs more explanation
+      - Changing the actual outcome of the decision.: Changing the actual outcome of the decision
+        help: needs more explanation
+      - Changing arguments made in court.: Changing arguments made in court
     none of the above: False
+---
+code: |
+  if needs_help_with["Reconsideration"]:
+    motion_type = "Motion for Reconsideration"
+  elif needs_help_with["Modification"]:
+    motion_type = "Motion for Modification"
+  elif needs_help_with.all_true('Reconsideration','Modification'):
+    motion_type = "Motion for Reconsideration and Modification"
+  else:
+    motion_type = "Can't file a motion"
 ---
 id: needs help with something else
 question: |
   Warning
 subquestion: |
-  You can still proceed with your Motion for Reconsideration and/or Modification, but it may not be allowed because you are submitting it more than 14 days after the Appeals Court decision.
+  You can still proceed with your ${ motion_type }, but it may not be allowed because you are submitting it more than 14 days after the Appeals Court decision.
 buttons:
   - Keep going:
       code: |
@@ -187,12 +209,12 @@ buttons:
 ---
 comment: |
   This question is used to introduce your interview. Please customize
-id: Motion to Reconsider
+id: Motion to Reconsider requirements
 continue button field: Motion_to_Reconsider_second_intro
 question: |
-  Motion for Reconsideration and/or Modification
+  ${ motion_type }
 subquestion: |
-  You can file a Motion for Reconsideration and/or Modification within 14 days after the date of the Court's decisions, unless the time is changed by order.
+  You have only have {14 days} after the date of the Court's decisions to file a ${ motion_type }.
   
   To use this form, you will need the relevant Trial and Appeals Court documents, including:
   
@@ -205,7 +227,9 @@ subquestion: |
     * the judgment
     
     * the record appendix
-
+terms: 
+  14 days: |
+    Sometimes a judge orders that you have more or less time to file. 
 
 ---
 id: 14 days
