@@ -93,8 +93,8 @@ code: |
     
   Motion_to_Reconsider_second_intro
     
-  if appellate_court_decision_date_passed:
-    appellate_court_decision_date_passed_continue_anyway
+  if appeals_court_decision_date_passed:
+    appeals_court_decision_date_passed_continue_anyway
 
   users[0].name.first
   users[0].address.address
@@ -171,7 +171,7 @@ id: needs help with something else
 question: |
   Warning
 subquestion: |
-  You can still proceed with your ${ motion_type }, but it may not be allowed because you are submitting it more than 14 days after the Appeals Court decision.
+  TO DO
 buttons:
   - Keep going:
       code: |
@@ -216,51 +216,78 @@ question: |
 subquestion: |
   You have only have {14 days} after the date of the Court's decisions to file a ${ motion_type }.
   
-  To use this form, you will need the relevant Trial and Appeals Court documents, including:
+  To use this form, you will need the relevant Trial and Appeals Court documents, including the:
   
-    * the Trial Court's docket
+    * Trial Court's docket
     
-    * the complaint
+    * Complaint
     
-    * your answer
+    * Answer
     
-    * the judgment
+    * Judgment
     
-    * the record appendix
+    * Record appendix
 terms: 
   14 days: |
     Sometimes a judge orders that you have more or less time to file. 
 
 ---
-id: 14 days
+id: final decision date
 question: |
-  Did the Appeals Court make its {final decision} before **${ format_date(current_datetime() - date_interval(days=14) ) }**?
-subquestion: |
-  Unless the time is shortened or enlarged by order, you must submit your Motion for Reconsideration and/or Modification within **14 days** of the Appeals Court decision.
-fields:
-  - no label: appellate_court_decision_date_passed
-    datatype: yesnoradio
+  When did the Appeals Court make its {final decision}? 
+fields: 
+  - Date: appeals_court_decision_date
+    datatype: date  
 terms:
   final decision: |
-    This is different than Trial Court decision that you are appealing.   
+    This is different than Trial Court decision that you are appealing.
+---
+id: order for more time yesno
+question: |
+  Did the court or judge order that you have more time to file a ${motion_type}?
+fields: 
+  - no label: order_time_amount_yesno
+    datatype: yesnoradio  
+  - How many more days did the judge give you?: order_time_amount
+    datatype: number
+    show if: order_time_amount_yesno
+---
+#code: |
+#  if appeals_court_decision_date 
+---
+#id: 14 days
+#question: |
+#  Did the Appeals Court make its {final decision} before **${ format_date(current_datetime() - date_interval(days=14) ) }**?
+#subquestion: |
+#  **You only have 14 days to file your ${motion_type}.**
+#  
+#  If the time is not shortened or enlarged by order, you must submit your Motion for Reconsideration and/or Modification within **14 days** of the Appeals Court decision.
+#fields:
+#  - no label: appeals_court_decision_date_passed
+#    datatype: yesnoradio
+#terms:
+#  final decision: |
+#    This is different than Trial Court decision that you are appealing.   
 ---
 id: 14 days warning
 question: |
   Warning
 subquestion: |
-  **Unless the time is shortened or enlarged by order, you must submit your Motion for Reconsideration and/or Modification within 14 days of the Appeals Court decision.**
+  **You only have 14 days to file your ${motion_type}.**
+  
+  If the time is not shortened or enlarged by order, you must submit your Motion for Reconsideration and/or Modification within 14 days of the Appeals Court decision.
   
   You said the date of the Appeals Court decision was made before **${ format_date( current_datetime() - date_interval(days=14) ) }**. That was more than 14 days ago.
   
-  To make a Motion for Enlargement of Time, visit our guided form [here](https://apps.suffolklitlab.org/run/appeal_enlarge_time/#/1).
+  If you need to ask the court for more time to file your ${motion_type}, file a Motion for Enlargement of Time. See the [here](https://apps.suffolklitlab.org/run/appeal_enlarge_time/#/1).
   
-  For more information, view the [Appellate Procedure for Rule 27](https://www.mass.gov/rules-of-appellate-procedure/appellate-procedure-rule-27-motion-for-reconsideration-or-modification).
+  For more information, view the [Appellate Procedure for Rule 27](https://www.mass.gov/rules-of-appeallate-procedure/appellate-procedure-rule-27-motion-for-reconsideration-or-modification).
     
   You can still proceed with your Motion for Reconsideration and/or Modification, but it may not be allowed because you are submitting it more than 14 days after the Appeals Court decision.
 buttons:
   - Keep going:
       code: |
-        appellate_court_decision_date_passed_continue_anyway = True  
+        appeals_court_decision_date_passed_continue_anyway = True  
   - Restart: restart
   - Exit: exit
 ---
