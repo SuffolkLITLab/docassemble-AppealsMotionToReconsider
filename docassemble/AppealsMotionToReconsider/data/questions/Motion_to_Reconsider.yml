@@ -171,7 +171,11 @@ id: needs help with something else
 question: |
   Warning
 subquestion: |
-  TO DO
+  If you are using this motion for a different reason (other than the listed reasons above), you may not want to use this file. However, you may still proceed, but the court may decline to accept your motion. 
+  
+  For more information on what you need to file a Motion for Reconsideration and/or Modification, view the [Appellate Procedure for Rule 27](https://www.mass.gov/rules-of-appellate-procedure/appellate-procedure-rule-27-motion-for-reconsideration-or-modification).
+
+   This form cannot be directly emailed to the Supreme Judicial Court. For more information, contact the Supreme Judicial Court Clerk's office: (617) 557-1020.
 buttons:
   - Keep going:
       code: |
