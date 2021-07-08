@@ -95,9 +95,13 @@ code: |
   users[0].address.address
   users[0].mobile_number
   user_needs_interpreter
-  users.there_is_another = False
-  users.gathered = True
+
+  #users.gathered = True
   user_ask_role
+
+  users.gather()
+  users.there_is_another
+
   other_parties.there_are_any = True
   plaintiffs.gather()
   plaintiffs[0].address.address
@@ -143,8 +147,6 @@ subquestion: |
     
     * A real-world change of circumstances
     
-    * Changing the actual outcome of any decision
-    
     * Changing arguments made in court
    
   For more information on what you need to file a Motion for Reconsideration and/or Modification, view the [Appellate Procedure for Rule 27](https://www.mass.gov/rules-of-appellate-procedure/appellate-procedure-rule-27-motion-for-reconsideration-or-modification).
@@ -153,25 +155,14 @@ subquestion: |
 ---
 comment: |
   This question is used to introduce your interview. Please customize
-id: Motion to Reconsider
+id: Motion to Reconsider 2
 continue button field: Motion_to_Reconsider_second_intro
 question: |
   Motion for Reconsideration and/or Modification
 subquestion: |
   You can file a Motion for Reconsideration and/or Modification within 14 days after the date of the Court's decisions, unless the time is changed by order.
   
-  To use this form, you will need the relevant Trial and Appeals Court documents, including:
-  
-    * the Trial Court's docket
-    
-    * the complaint
-    
-    * your answer
-    
-    * the judgment
-    
-    * the record appendix
-
+  To use this form, you may need the Trial Court's decision.
 
 ---
 id: 14 days
@@ -393,11 +384,11 @@ progress: 100
 section: download
 ---
 objects:
-  - Motion_to_Reconsider_attachment: ALDocument.using(title="Motion to Reconsider", filename="Motion_to_Reconsider", enabled=True, has_addendum=False)
+  - Motion_to_Reconsider_attachment: ALDocument.using(enabled=True, title="Motion to Reconsider", filename="Motion_to_Reconsider", enabled=True, has_addendum=False)
 ---
 objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[Motion_to_Reconsider_attachment], filename="Motion_to_Reconsider.pdf", title="All forms to download for your records")
-  - al_court_bundle: ALDocumentBundle.using(elements=[Motion_to_Reconsider_attachment], filename="Motion_to_Reconsider.pdf", title="All forms to download for your records")
+  - al_user_bundle: ALDocumentBundle.using(enabled=True, elements=[Motion_to_Reconsider_attachment], filename="Motion_to_Reconsider.pdf", title="All forms to download for your records")
+  - al_court_bundle: ALDocumentBundle.using(enabled=True, elements=[Motion_to_Reconsider_attachment], filename="Motion_to_Reconsider.pdf", title="All forms to download for your records")
 ---
 attachment:
     variable name: Motion_to_Reconsider_attachment[i]
