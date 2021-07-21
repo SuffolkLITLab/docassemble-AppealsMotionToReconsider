@@ -40,7 +40,7 @@ code: |
   })
 ---
 code: |
-  interview_short_title = 'File a Motion to Reconsider'
+  interview_short_title = 'Ask the Appeals Court to look at your case again'
 ---
 code: |
   al_form_type = 'appeal'
@@ -384,7 +384,7 @@ progress: 100
 section: download
 ---
 objects:
-  - Motion_to_Reconsider_attachment: ALDocument.using(enabled=True, title="Motion to Reconsider", filename="Motion_to_Reconsider", enabled=True, has_addendum=False)
+  - Motion_to_Reconsider_attachment: ALDocument.using(enabled=True, title="Motion to Reconsider", filename="Motion_to_Reconsider", has_addendum=False)
 ---
 objects:
   - al_user_bundle: ALDocumentBundle.using(enabled=True, elements=[Motion_to_Reconsider_attachment], filename="Motion_to_Reconsider.pdf", title="All forms to download for your records")
