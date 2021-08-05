@@ -67,8 +67,8 @@ code: |
   # delete the `mandatory: True` specifier or this whole block.
   al_intro_screen  # Organization intro screen/splash screen
   # Introduction to this specific interview
-  Motion_to_Reconsider_intro
-  Motion_to_Reconsider_second_intro
+  needs_help_with
+
   # Trigger the whole interview order block to control question order
   interview_order_Motion_to_Reconsider
   signature_date
@@ -88,8 +88,13 @@ code: |
   # Below sets the user_role by asking a question.
   # You can set user_role directly instead to either 'plaintiff' or 'defendant'
   
-  if appellate_court_decision_date_passed:
-    appellate_court_decision_date_passed_continue_anyway
+  if needs_help_with["A real-world change of circumstances"] or needs_help_with["Changing the actual outcome of the decision"] or needs_help_with["Changing arguments made in court"]:
+    needs_help_with_something_else_continue_anyway
+    
+  Motion_to_Reconsider_second_intro
+    
+  if appeals_court_decision_date_passed:
+    appeals_court_decision_date_passed_continue_anyway
 
   users[0].name.first
   users[0].address.address
@@ -131,69 +136,168 @@ code: |
 comment: |
   This question is used to introduce your interview. Please customize
 id: Motion to Reconsider
-continue button field: Motion_to_Reconsider_intro
 question: |
-  What you need to know
+  Motion to Reconsider, Motion to Modify, or Motion to Reconsider and Modify
 subquestion: |
-  **You can use this form to file a Motion for:**
+  File one of these motions if you need the Appeals Court to look at your case again because:  
   
-    1. Reconsideration, if you are asking the Court to reverse or otherwise change the outcome of your Appeal.
-    
-    2. Modification, if you are asking that an inaccuracy in the decision be corrected but the outcome to remain the same.
-    
-    3. Reconsideration and Modification, if you are asking the Court for both as defined above.
+  * the court's reasoning that led to the current order was wrong, 
+  * the court failed to consider evidence, or
+  * the judge should know about new information that affects the decision the court already made. 
   
-  **This form is *not* used for:**
-    
-    * A real-world change of circumstances
-    
-    * Changing arguments made in court
-   
+  What do you need help with?
+fields: 
+  - no label: needs_help_with
+    datatype: checkboxes
+    choices: 
+      - Reconsideration.: Reconsideration
+        help: If you need the Court to undo or change the previous decision in your Appeal.
+      - Modification.: Modification
+        help: If you need the court to correct some inaccuracy in the decision keep the outcome the same.
+      - A real-world change of circumstances.: A real-world change of circumstances
+        help: needs more explanation
+      - Changing the actual outcome of the decision.: Changing the actual outcome of the decision
+        help: needs more explanation
+      - Changing arguments made in court.: Changing arguments made in court
+    none of the above: False
+---
+code: |
+  if needs_help_with["Reconsideration"]:
+    motion_type = "Motion for Reconsideration"
+  elif needs_help_with["Modification"]:
+    motion_type = "Motion for Modification"
+  elif needs_help_with.all_true('Reconsideration','Modification'):
+    motion_type = "Motion for Reconsideration and Modification"
+  else:
+    motion_type = "Can't file a motion"
+---
+id: needs help with something else
+question: |
+  Warning
+subquestion: |
+  If you are using this motion for a different reason (other than the listed reasons above), you may not want to use this file. 
+  However, you may still proceed, but the court may decline to accept your motion. 
+  
   For more information on what you need to file a Motion for Reconsideration and/or Modification, view the [Appellate Procedure for Rule 27](https://www.mass.gov/rules-of-appellate-procedure/appellate-procedure-rule-27-motion-for-reconsideration-or-modification).
-   
-  This form cannot be directly emailed to the Supreme Judicial Court. For more information, contact the Supreme Judicial Court Clerk's office: (617) 557-1020.
+
+   This form cannot be directly emailed to the Supreme Judicial Court. For more information, contact the Supreme Judicial Court Clerk's office: (617) 557-1020.
+buttons:
+  - Keep going:
+      code: |
+        needs_help_with_something_else_continue_anyway = True  
+  - Restart: restart
+  - Exit: exit
+---
+#---
+#comment: |
+#  This question is used to introduce your interview. Please customize
+#id: Motion to Reconsider
+#continue button field: Motion_to_Reconsider_intro
+#question: |
+#  What you need to know
+#subquestion: |
+#  **You can use this form to file a Motion for:**
+#  
+#    1. Reconsideration, if you are asking the Court to reverse or otherwise change the outcome of your Appeal.
+#    
+#    2. Modification, if you are asking that an inaccuracy in the decision be corrected but the outcome to remain the same.
+#    
+#    3. Reconsideration and Modification, if you are asking the Court for both as defined above.
+#  
+#  **This form is *not* used for:**
+#    
+#    * A real-world change of circumstances
+#    
+#    * Changing the actual outcome of any decision
+#    
+#    * Changing arguments made in court
+#   
+#  For more information on what you need to file a Motion for Reconsideration and/or Modification, view the [Appellate Procedure for Rule 27](https://www.mass.gov/rules-of-appellate-procedure/appellate-procedure-rule-27-motion-for-reconsideration-or-modification).
+#   
+#  This form cannot be directly emailed to the Supreme Judicial Court. For more information, contact the Supreme Judicial Court Clerk's office: (617) 557-1020.
 ---
 comment: |
   This question is used to introduce your interview. Please customize
-id: Motion to Reconsider 2
+id: Motion to Reconsider requirements
+
 continue button field: Motion_to_Reconsider_second_intro
 question: |
-  Motion for Reconsideration and/or Modification
+  ${ motion_type }
 subquestion: |
-  You can file a Motion for Reconsideration and/or Modification within 14 days after the date of the Court's decisions, unless the time is changed by order.
+  You have only have {14 days} after the date of the Court's decisions to file a ${ motion_type }.
   
-  To use this form, you may need the Trial Court's decision.
-
+  To use this form, you will need the relevant Trial and Appeals Court documents, including the:
+  
+    * Trial Court's docket
+    
+    * Complaint
+    
+    * Answer
+    
+    * Judgment
+    
+    * Record appendix
+terms: 
+  14 days: |
+    Sometimes a judge orders that you have more or less time to file. 
 ---
-id: 14 days
+id: final decision date
 question: |
-  Did the Appeals Court make its {final decision} before **${ format_date(current_datetime() - date_interval(days=14) ) }**?
-subquestion: |
-  Unless the time is shortened or enlarged by order, you must submit your Motion for Reconsideration and/or Modification within **14 days** of the Appeals Court decision.
-fields:
-  - no label: appellate_court_decision_date_passed
-    datatype: yesnoradio
+  When did the Appeals Court make its {final decision}? 
+fields: 
+  - Date: appeals_court_decision_date
+    datatype: date  
 terms:
   final decision: |
-    This is different than Trial Court decision that you are appealing.   
+    This is different than Trial Court decision that you are appealing.
+---
+id: order for more time yesno
+question: |
+  Did the court or judge order that you have more time to file a ${motion_type}?
+fields: 
+  - no label: order_time_amount_yesno
+    datatype: yesnoradio  
+  - How many more days did the judge give you?: order_time_amount
+    datatype: number
+    show if: order_time_amount_yesno
+---
+#code: |
+#  if appeals_court_decision_date 
+---
+#id: 14 days
+#question: |
+#  Did the Appeals Court make its {final decision} before **${ format_date(current_datetime() - date_interval(days=14) ) }**?
+#subquestion: |
+#  **You only have 14 days to file your ${motion_type}.**
+#  
+#  If the time is not shortened or enlarged by order, you must submit your Motion for Reconsideration and/or Modification within **14 days** of the Appeals Court decision.
+#fields:
+#  - no label: appeals_court_decision_date_passed
+#    datatype: yesnoradio
+#terms:
+#  final decision: |
+#    This is different than Trial Court decision that you are appealing.   
 ---
 id: 14 days warning
 question: |
   Warning
 subquestion: |
-  **Unless the time is shortened or enlarged by order, you must submit your Motion for Reconsideration and/or Modification within 14 days of the Appeals Court's decision.**
+  **You only have 14 days to file your ${motion_type}.**
+  
+  If the time is not shortened or enlarged by order, you must submit your Motion for Reconsideration and/or Modification within 14 days of the Appeals Court decision.
+
   
   You said the date of the Appeals Court's decision was made before **${ format_date( current_datetime() - date_interval(days=14) ) }**. That was more than 14 days ago.
   
-  To make a Motion for Enlargement of Time, visit our guided form [here](https://apps.suffolklitlab.org/run/appeal_enlarge_time/#/1).
+  If you need to ask the court for more time to file your ${motion_type}, file a Motion for Enlargement of Time. See the [here](https://apps.suffolklitlab.org/run/appeal_enlarge_time/#/1).
   
-  For more information, view the [Appellate Procedure for Rule 27](https://www.mass.gov/rules-of-appellate-procedure/appellate-procedure-rule-27-motion-for-reconsideration-or-modification).
+  For more information, view the [Appellate Procedure for Rule 27](https://www.mass.gov/rules-of-appeallate-procedure/appellate-procedure-rule-27-motion-for-reconsideration-or-modification).
     
   You can still proceed with your Motion for Reconsideration and/or Modification, but it may not be allowed because you are submitting it more than 14 days after the Appeals Court's decision.
 buttons:
   - Keep going:
       code: |
-        appellate_court_decision_date_passed_continue_anyway = True  
+        appeals_court_decision_date_passed_continue_anyway = True  
   - Restart: restart
   - Exit: exit
 ---
