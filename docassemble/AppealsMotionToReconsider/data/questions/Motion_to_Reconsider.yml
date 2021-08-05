@@ -251,6 +251,13 @@ terms:
   final decision: |
     This is different than Trial Court decision that you are appealing.
 ---
+code: |
+  num_days_elapsed = (today() - appeals_court_decision_date).days
+  if num_days_elapsed > 14:
+    appeals_court_decision_date_passed = not ( order_time_amount_yesno and (num_days_elapsed - 14 <= order_time_amount))
+  else:
+    appeals_court_decision_date_passed = False
+---
 id: order for more time yesno
 question: |
   Did the court or judge order that you have more time to file a ${motion_type}?
@@ -258,7 +265,7 @@ fields:
   - no label: order_time_amount_yesno
     datatype: yesnoradio  
   - How many more days did the judge give you?: order_time_amount
-    datatype: number
+    datatype: integer
     show if: order_time_amount_yesno
 ---
 #code: |
@@ -289,7 +296,7 @@ subquestion: |
   
   You said the date of the Appeals Court's decision was made before **${ format_date( current_datetime() - date_interval(days=14) ) }**. That was more than 14 days ago.
   
-  If you need to ask the court for more time to file your ${motion_type}, file a Motion for Enlargement of Time. See the [here](https://apps.suffolklitlab.org/run/appeal_enlarge_time/#/1).
+  If you need to ask the court for more time to file your ${motion_type}, file a Motion for Enlargement of Time. See the form [here](https://apps.suffolklitlab.org/run/appeal_enlarge_time/#/1).
   
   For more information, view the [Appellate Procedure for Rule 27](https://www.mass.gov/rules-of-appeallate-procedure/appellate-procedure-rule-27-motion-for-reconsideration-or-modification).
     
@@ -472,11 +479,15 @@ subquestion: |
   % endif
   
   % if not defined('email_success') or not email_success:
-    ${ action_button_html( url_action('form_delivery_complete'), id_tag="submitToCourt", label="Submit to the Massachusetts Appeals Court", icon=send_icon, size="md", color="primary")}
+  % if get_config('debug'):
+  `Debug information: court email is ${court_email}`
+  
+  % endif
+  
+  ${ action_button_html( url_action('form_delivery_complete'), id_tag="submitToCourt", label="Submit to the Massachusetts Appeals Court", icon=send_icon, size="md", color="primary")}
     
   % else:
-    **[:file-download: Your Motion]( ${ al_user_bundle.as_pdf(key='final').url_for()} )** has already been delivered to the Appeals Court.
-    
+  **[:file-download: Your Motion]( ${ al_user_bundle.as_pdf(key='final').url_for()} )** has already been delivered to the Appeals Court.    
  
   % endif
   
@@ -553,3 +564,59 @@ review:
       % endfor
     # NOTE: a question block with 'plaintiffs.revisit'
     # lets the user edit all of the items at once
+---
+##################################
+# Some transition stuff from MAVC to AL
+---
+code: |
+  court_email = court_emails.get('Massachusetts Appeals Court')
+  if not court_email:
+    found_email = False
+  else:
+    found_email = True  
+---
+code: |
+  macourts = all_courts
+---
+code: |
+  courts[0] = all_courts.matching_appeals_court("")
+---
+code: |
+  appeals_court = all_courts.matching_appeals_court("")
+---
+code: |
+  num_package_pages = al_court_bundle.as_pdf().num_pages()
+---
+id: cover page instructions
+question: |
+  Special instructions for the cover page
+subquestion: |
+  Before we deliver your form, you can include instructions on the cover
+  page that will be sent to the clerk at the Massachusetts Appeals Court.
+  
+  For example, you may have special instructions about how and when to reach
+  you that you did not already include in the contact information section.
+  
+  The clerk _may_ print the cover page and include it in the public file.
+
+  Are there any instructions that you would like to give to the clerk that will
+  receive your forms?
+fields:
+  - Information for clerk: comments_to_clerk
+    datatype: area
+    rows: 4
+    required: False
+help:
+  label: |
+    What to include?
+  content: |
+    Include information that you want the clerk to know. The clerk is the person
+    who will receive your paperwork and put it in an official court file. The
+    clerk is not a decision maker on your case.
+
+    Do not include information that is meant for the judge or the other party.
+    Do not include information that is meant to be part of your official case.
+
+    There is a chance this information may end up in the public court file, so
+    do not include sensitive or private information.  
+  

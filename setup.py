@@ -43,7 +43,7 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
     return out
 
 setup(name='docassemble.AppealsMotionToReconsider',
-      version='1.0',
+      version='1.0.1',
       description=('Motion to reconsider template'),
       long_description='# docassemble.Motiontoreconsidertemplate\r\n\r\nMotion to reconsider template\r\n\r\n## Author\r\n\r\nauthor@example.com\r\n\r\n',
       long_description_content_type='text/markdown',
