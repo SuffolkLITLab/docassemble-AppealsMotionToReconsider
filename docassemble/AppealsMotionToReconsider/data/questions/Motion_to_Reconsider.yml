@@ -100,9 +100,13 @@ code: |
   users[0].address.address
   users[0].mobile_number
   user_needs_interpreter
-  users.there_is_another = False
-  users.gathered = True
+
+  #users.gathered = True
   user_ask_role
+
+  users.gather()
+  users.there_is_another
+
   other_parties.there_are_any = True
   plaintiffs.gather()
   plaintiffs[0].address.address
@@ -171,7 +175,8 @@ id: needs help with something else
 question: |
   Warning
 subquestion: |
-  If you are using this motion for a different reason (other than the listed reasons above), you may not want to use this file. However, you may still proceed, but the court may decline to accept your motion. 
+  If you are using this motion for a different reason (other than the listed reasons above), you may not want to use this file. 
+  However, you may still proceed, but the court may decline to accept your motion. 
   
   For more information on what you need to file a Motion for Reconsideration and/or Modification, view the [Appellate Procedure for Rule 27](https://www.mass.gov/rules-of-appellate-procedure/appellate-procedure-rule-27-motion-for-reconsideration-or-modification).
 
@@ -214,6 +219,7 @@ buttons:
 comment: |
   This question is used to introduce your interview. Please customize
 id: Motion to Reconsider requirements
+
 continue button field: Motion_to_Reconsider_second_intro
 question: |
   ${ motion_type }
@@ -234,7 +240,6 @@ subquestion: |
 terms: 
   14 days: |
     Sometimes a judge orders that you have more or less time to file. 
-
 ---
 id: final decision date
 question: |
@@ -280,14 +285,15 @@ subquestion: |
   **You only have 14 days to file your ${motion_type}.**
   
   If the time is not shortened or enlarged by order, you must submit your Motion for Reconsideration and/or Modification within 14 days of the Appeals Court decision.
+
   
-  You said the date of the Appeals Court decision was made before **${ format_date( current_datetime() - date_interval(days=14) ) }**. That was more than 14 days ago.
+  You said the date of the Appeals Court's decision was made before **${ format_date( current_datetime() - date_interval(days=14) ) }**. That was more than 14 days ago.
   
   If you need to ask the court for more time to file your ${motion_type}, file a Motion for Enlargement of Time. See the [here](https://apps.suffolklitlab.org/run/appeal_enlarge_time/#/1).
   
   For more information, view the [Appellate Procedure for Rule 27](https://www.mass.gov/rules-of-appeallate-procedure/appellate-procedure-rule-27-motion-for-reconsideration-or-modification).
     
-  You can still proceed with your Motion for Reconsideration and/or Modification, but it may not be allowed because you are submitting it more than 14 days after the Appeals Court decision.
+  You can still proceed with your Motion for Reconsideration and/or Modification, but it may not be allowed because you are submitting it more than 14 days after the Appeals Court's decision.
 buttons:
   - Keep going:
       code: |
@@ -482,11 +488,11 @@ progress: 100
 section: download
 ---
 objects:
-  - Motion_to_Reconsider_attachment: ALDocument.using(title="Motion to Reconsider", filename="Motion_to_Reconsider", enabled=True, has_addendum=False)
+  - Motion_to_Reconsider_attachment: ALDocument.using(enabled=True, title="Motion to Reconsider", filename="Motion_to_Reconsider", has_addendum=False)
 ---
 objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[Motion_to_Reconsider_attachment], filename="Motion_to_Reconsider.pdf", title="All forms to download for your records")
-  - al_court_bundle: ALDocumentBundle.using(elements=[Motion_to_Reconsider_attachment], filename="Motion_to_Reconsider.pdf", title="All forms to download for your records")
+  - al_user_bundle: ALDocumentBundle.using(enabled=True, elements=[Motion_to_Reconsider_attachment], filename="Motion_to_Reconsider.pdf", title="All forms to download for your records")
+  - al_court_bundle: ALDocumentBundle.using(enabled=True, elements=[Motion_to_Reconsider_attachment], filename="Motion_to_Reconsider.pdf", title="All forms to download for your records")
 ---
 attachment:
     variable name: Motion_to_Reconsider_attachment[i]
