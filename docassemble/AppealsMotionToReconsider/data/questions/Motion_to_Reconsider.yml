@@ -88,8 +88,8 @@ code: |
   # Below sets the user_role by asking a question.
   # You can set user_role directly instead to either 'plaintiff' or 'defendant'
   
-  if needs_help_with["A real-world change of circumstances"] or needs_help_with["Changing the actual outcome of the decision"] or needs_help_with["Changing arguments made in court"]:
-    needs_help_with_something_else_continue_anyway
+  #if needs_help_with["A real-world change of circumstances"] or needs_help_with["Changing the actual outcome of the decision"] or needs_help_with["Changing arguments made in court"]:
+  #  needs_help_with_something_else_continue_anyway
     
   Motion_to_Reconsider_second_intro
     
@@ -144,6 +144,12 @@ subquestion: |
   * the court's reasoning that led to the current order was wrong, 
   * the court failed to consider evidence, or
   * the judge should know about new information that affects the decision the court already made. 
+ 
+  Do not use this motion to tell the judge about a real-world change of 
+  circumstances.
+
+  Do not use this motion to tell the judge about a new argument that you are
+  making for the first time.
   
   What do you need help with?
 fields: 
@@ -151,23 +157,28 @@ fields:
     datatype: checkboxes
     choices: 
       - Reconsideration.: Reconsideration
-        help: If you need the Court to undo or change the previous decision in your Appeal.
+        help: |
+          If you need the Court to look at a fact that was part of the appellate
+          record but that the judge did not consider, or a law or legal standard 
+          that the judge did not consider in the original decision.
       - Modification.: Modification
-        help: If you need the court to correct some inaccuracy in the decision keep the outcome the same.
-      - A real-world change of circumstances.: A real-world change of circumstances
-        help: needs more explanation
-      - Changing the actual outcome of the decision.: Changing the actual outcome of the decision
-        help: needs more explanation
-      - Changing arguments made in court.: Changing arguments made in court
+        help: |
+          If you need the court to correct an inaccuracy in the decision.
+      #- A real-world change of circumstances.: A real-world change of circumstances
+      #  help: needs more explanation
+      #- Changing the actual outcome of the decision.: Changing the actual outcome of the decision
+      #  help: needs more explanation
+      #- Changing arguments made in court.: Changing arguments made in court
+    minlength: 1
     none of the above: False
 ---
 code: |
-  if needs_help_with["Reconsideration"]:
+  if needs_help_with.all_true('Reconsideration','Modification'):
+    motion_type = "Motion for Reconsideration and Modification"
+  elif needs_help_with["Reconsideration"]:
     motion_type = "Motion for Reconsideration"
   elif needs_help_with["Modification"]:
     motion_type = "Motion for Modification"
-  elif needs_help_with.all_true('Reconsideration','Modification'):
-    motion_type = "Motion for Reconsideration and Modification"
   else:
     motion_type = "Can't file a motion"
 ---
