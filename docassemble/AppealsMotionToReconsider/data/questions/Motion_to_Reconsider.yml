@@ -237,17 +237,6 @@ question: |
 subquestion: |
   You have only have {14 days} after the date of the Court's decisions to file a ${ motion_type }.
   
-  To use this form, you will need the relevant Trial and Appeals Court documents, including the:
-  
-    * Trial Court's docket
-    
-    * Complaint
-    
-    * Answer
-    
-    * Judgment
-    
-    * Record appendix
 terms: 
   14 days: |
     Sometimes a judge orders that you have more or less time to file. 

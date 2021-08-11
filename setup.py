@@ -53,7 +53,7 @@ setup(name='docassemble.AppealsMotionToReconsider',
       url='https://courtformsonline.org',
       packages=find_packages(),
       namespace_packages=['docassemble'],
-      install_requires=['docassemble.AssemblyLine>=2.2.0', 'docassemble.MassAppealsCourt'],
+      install_requires=['docassemble.AssemblyLine>=2.2.1', 'docassemble.MassAppealsCourt'],
       zip_safe=False,
       package_data=find_package_data(where='docassemble/AppealsMotionToReconsider/', package='docassemble.AppealsMotionToReconsider'),
      )
