@@ -6,6 +6,7 @@ from distutils.util import convert_path
 
 standard_exclude = ('*.pyc', '*~', '.*', '*.bak', '*.swp*')
 standard_exclude_directories = ('.*', 'CVS', '_darcs', './build', './dist', 'EGG-INFO', '*.egg-info')
+
 def find_package_data(where='.', package='', exclude=standard_exclude, exclude_directories=standard_exclude_directories):
     out = {}
     stack = [(convert_path(where), '', package)]
@@ -43,9 +44,9 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
     return out
 
 setup(name='docassemble.AppealsMotionToReconsider',
-      version='1.0.3',
+      version='1.0.4',
       description=('Motion to reconsider template'),
-      long_description='# docassemble.Motiontoreconsidertemplate\r\n\r\nMotion to reconsider template\r\n\r\n## Author\r\n\r\nauthor@example.com\r\n\r\n',
+      long_description='# docassemble.Motiontoreconsidertemplate\r\n\r\nMotion to reconsider template\r\n\r\n## Author\r\n\r\nRebecca (Ngan) Truong\r\n\r\n',
       long_description_content_type='text/markdown',
       author='Rebecca (Ngan) Truong',
       author_email='ntruong2@su.suffolk.edu',
@@ -53,7 +54,7 @@ setup(name='docassemble.AppealsMotionToReconsider',
       url='https://courtformsonline.org',
       packages=find_packages(),
       namespace_packages=['docassemble'],
-      install_requires=['docassemble.AssemblyLine>=2.2.1', 'docassemble.MassAppealsCourt'],
+      install_requires=['docassemble.AssemblyLine>=2.14.1', 'docassemble.MassAppealsCourt>=0.1.0'],
       zip_safe=False,
       package_data=find_package_data(where='docassemble/AppealsMotionToReconsider/', package='docassemble.AppealsMotionToReconsider'),
      )

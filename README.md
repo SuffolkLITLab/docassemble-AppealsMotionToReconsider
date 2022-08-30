@@ -4,5 +4,5 @@ Motion to reconsider template
 
 ## Author
 
-author@example.com
+Rebecca (Ngan) Truong
 
