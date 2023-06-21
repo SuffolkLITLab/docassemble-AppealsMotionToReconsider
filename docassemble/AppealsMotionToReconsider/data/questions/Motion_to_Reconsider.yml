@@ -74,6 +74,7 @@ code: |
   signature_date
   # Save (anonymized) interview statistics.
   store_variables_snapshot(data={'zip': users[0].address.zip})
+  users[0].pronouns
   Motion_to_Reconsider_preview_question  # Pre-canned preview screen
   basic_questions_signature_flow
   users[0].signature
