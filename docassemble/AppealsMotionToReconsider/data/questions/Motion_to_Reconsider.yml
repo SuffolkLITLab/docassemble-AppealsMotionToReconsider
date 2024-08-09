@@ -10,6 +10,45 @@ metadata:
     Motion to Reconsider
   short title: |
     Motion to Reconsider
+  description: |
+    If you need the Appeals Court to take a look at your case again you can use this interview to create a motion asking for a reconsideration and or modification. 
+    This form can also help you serve your motion to the other party and help you request an interpreter if you need one. 
+  can_I_use_this_form: |
+    You can use this form if it has been ** 14 days or less since the date of the Court's decisions **. You only have 14 days after the date of the Court’s decisions to file a Motion for Reconsideration and Modification.
+    
+    The following are the reasons you can request these motions: 
+      * the court’s reasoning that led to the current order was wrong,
+      * the court failed to consider evidence, or
+      * the judge should know about new information that affects the decision the court already made.
+    
+    You **may not** use this form for the following reasons: 
+      * to tell the judge about a real-world change of circumstances, or
+      * to tell the judge about a new argument that you are making for the first time.
+  before_you_start: |
+     Before you start, you need to get documents from your case in the Trial Court and Appeals Court, including:
+       * Your Appeals Court notice 
+  maturity: production
+  estimated_completion_minutes: 60
+  estimated_completion_delta: 30
+  languages:
+    - en
+  help_page_url: https://www.mass.gov/rules-of-appellate-procedure/appellate-procedure-rule-27-motion-for-reconsideration-or-modification-of-decision
+  help_page_title: Appellate Procedure Rule 27 Motion for reconsideration or modification of decision
+  LIST_topics: 
+    - FA-07-00-00-00
+  tags: 
+    - FA-07-00-00-00
+  jurisdiction: NAM-US-US+MA
+  original_form: 
+  original_form_published_on: 
+  review_date: August 2024
+  form_titles:
+    - Appeals Motion for Reconsideration or Modification of Decision
+  form_numbers:
+    - 
+  fees:
+    - Filing fee: 0.00
+  update_notes: |
 ---
 comment: |
   This section is used by AssemblyLine to control how some of the questions work.
