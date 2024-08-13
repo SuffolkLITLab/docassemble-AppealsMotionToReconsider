@@ -35,9 +35,11 @@ metadata:
   help_page_url: https://www.mass.gov/rules-of-appellate-procedure/appellate-procedure-rule-27-motion-for-reconsideration-or-modification-of-decision
   help_page_title: Appellate Procedure Rule 27 Motion for reconsideration or modification of decision
   LIST_topics: 
-    - FA-07-00-00-00
+    - CR-08-01-01-00
+    - CO-07-02-00-00
   tags: 
-    - FA-07-00-00-00
+    - CR-08-01-01-00
+    - CO-07-02-00-00
   jurisdiction: NAM-US-US+MA
   original_form: 
   original_form_published_on: 
