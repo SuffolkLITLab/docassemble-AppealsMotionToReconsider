@@ -10,7 +10,7 @@ version = "1.0.5"
 description = "Motion to reconsider template"
 readme = "README.md"
 authors = [
-    { name = "Kaveesha Shah - LIT Volunteer", email = "litlab@suffolk.edu" },
+    { name = "Rebecca (Ngan) Truong", email = "ntruong2@su.suffolk.edu" },
 ]
 dependencies = [
     "docassemble.AssemblyLine @ git+https://github.com/SuffolkLITLab/docassemble-AssemblyLine.git@main",
