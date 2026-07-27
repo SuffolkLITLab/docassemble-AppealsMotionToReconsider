@@ -44,7 +44,7 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
     return out
 
 setup(name='docassemble.AppealsMotionToReconsider',
-      version='1.0.5',
+      version='1.0.6',
       description=('Motion to reconsider template'),
       long_description='# A Docassemble interview for the Massachussetts Appeals Court Motion to Reconsider\r\n\r\nThis is a Docassemble interview to complete the Massachussetts Appeals Court Motion to Reconsider forms online. The live interview can be found at\r\n(https://courtformsonline.org/ma/forms/motion-to-reconsider).\r\n\r\n',
       long_description_content_type='text/markdown',
