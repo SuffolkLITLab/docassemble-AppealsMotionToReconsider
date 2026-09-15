@@ -304,7 +304,7 @@ id: order for more time yesno
 question: |
   Did the court or judge order that you have more time to file a ${motion_type}?
 fields: 
-  - no label: order_time_amount_yesno
+  - "Did the court or judge order that you have more time to file a ${motion_type}?": order_time_amount_yesno
     datatype: yesnoradio  
   - How many more days did the judge give you?: order_time_amount
     datatype: integer
@@ -453,7 +453,9 @@ subquestion: |
   % for point in points_for_motion.complete_elements():
   * ${ point.reason }
   % endfor
-yesno: points_for_motion.there_is_another
+fields:
+  - no label: points_for_motion.there_is_another
+    datatype: yesnoradio
 ---
 id: method of service
 question: |
